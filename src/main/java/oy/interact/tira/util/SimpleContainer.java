@@ -5,6 +5,7 @@ import java.util.Comparator;
 import java.util.function.Predicate;
 
 import oy.interact.tira.NotYetImplementedException;
+import oy.interact.tira.model.Coder;
 import oy.interact.tira.student.Algorithms;
 
 public class SimpleContainer<E extends Comparable<E>> implements TIRAContainer<E> {
@@ -190,7 +191,10 @@ public class SimpleContainer<E extends Comparable<E>> implements TIRAContainer<E
 	@Override
 	public void sort() {
 		// TODO: Student: finish this as part of task 02.
+		//tässä kutsutaan toteutettua lisäyslajittelualgoritmia ohjeen mukaisesti välillä 0..<count, jonka välillä ei ole null-arvoja
+		Algorithms.insertionSort(array, 0, count);
 	}
+
 
 	// TEACHERS: TODO: Remove the call to Algorithms sort method.
 	@Override
