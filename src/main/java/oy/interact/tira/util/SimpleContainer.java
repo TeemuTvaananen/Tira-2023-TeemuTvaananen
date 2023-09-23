@@ -18,7 +18,7 @@ public class SimpleContainer<E extends Comparable<E>> implements TIRAContainer<E
 	private int count = 0;
 	private int reallocationCount = 0;
 
-	private boolean sorted = false;
+	private boolean sorted = true;
 
 	public SimpleContainer(Class<E> clazz) {
 		this(clazz, DEFAULT_ARRAY_SIZE);
@@ -62,13 +62,23 @@ public class SimpleContainer<E extends Comparable<E>> implements TIRAContainer<E
 	@Override
 	public E get(E element) throws IllegalArgumentException {
 		// TODO: Student: finish this as part of task 02.
-		throw new NotYetImplementedException("Task 02-TASK on linear search not yet implemented");
+		for(int index = 0; index < count; index++){
+			if(array[index].equals(element)){
+				return element;
+			}
+		}
+		return null;
 	}
 
 	@Override
 	public int indexOf(E element, Comparator<E> usingComparator) {
 		// TODO: Student: finish this as part of task 02.
-		throw new NotYetImplementedException("Task 02-TASK on linear search not yet implemented");
+			for(int index = 0; index < count; index++){
+			if(array[index].compareTo(element) == 0){
+				return index;
+			}
+		}
+		return 0;
 	}
 
 	// Note: This method is NOT USED by tests and TIRA Coders GUI.
@@ -185,6 +195,7 @@ public class SimpleContainer<E extends Comparable<E>> implements TIRAContainer<E
 	@Override
 	public void reverse() {
 		// TODO: Student: finish this as part of task 02.
+		Algorithms.reverse(array, 0, count);
 	}
 
 	// TEACHERS: TODO: Remove the call to Algorithms sort method.
@@ -199,7 +210,7 @@ public class SimpleContainer<E extends Comparable<E>> implements TIRAContainer<E
 	// TEACHERS: TODO: Remove the call to Algorithms sort method.
 	@Override
 	public void sort(Comparator<E> usingComparator) {
-		// TODO: Student: finish this as part of task 02.
+		Algorithms.insertionSort(array, 0, count, usingComparator);
 	}
 
 }
