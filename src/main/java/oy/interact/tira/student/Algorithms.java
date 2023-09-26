@@ -130,17 +130,22 @@ public class Algorithms {
 
    public static <T extends Comparable<T>> int binarySearch(T aValue, T[] fromArray, int fromIndex, int toIndex) {
 
-      while(fromIndex < toIndex){
-         int middlePointer = (fromIndex + toIndex) / 2;
 
-         if(aValue.compareTo(fromArray[middlePointer])== 0){
-            return middlePointer;
-         }
+     int left = fromIndex;
+     int right = toIndex - 1;
 
-         if(aValue.compareTo(fromArray[middlePointer]) < 0){
-            return middlePointer - 1;
-         } else
-      }
+       while (left <= right) {
+            int middlePointer = left + (right - left) / 2;
+            int compareResult = aValue.compareTo(fromArray[middlePointer]);
+
+            if (compareResult == 0)
+                return middlePointer;
+            else if (compareResult < 0)
+                right = middlePointer - 1;
+            else
+                left = middlePointer + 1;
+        }
+
 
       return -1;
    }
