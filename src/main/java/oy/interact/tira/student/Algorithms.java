@@ -129,6 +129,19 @@ public class Algorithms {
    ///////////////////////////////////////////
 
    public static <T extends Comparable<T>> int binarySearch(T aValue, T[] fromArray, int fromIndex, int toIndex) {
+
+      while(fromIndex < toIndex){
+         int middlePointer = (fromIndex + toIndex) / 2;
+
+         if(aValue.compareTo(fromArray[middlePointer])== 0){
+            return middlePointer;
+         }
+
+         if(aValue.compareTo(fromArray[middlePointer]) < 0){
+            return middlePointer - 1;
+         } else
+      }
+
       return -1;
    }
 

@@ -64,7 +64,7 @@ public class SimpleContainer<E extends Comparable<E>> implements TIRAContainer<E
 		// TODO: Student: finish this as part of task 02.
 		for(int index = 0; index < count; index++){
 			if(array[index].equals(element)){
-				return element;
+				return array[index];
 			}
 		}
 		return null;
@@ -78,7 +78,7 @@ public class SimpleContainer<E extends Comparable<E>> implements TIRAContainer<E
 				return index;
 			}
 		}
-		return 0;
+		return -1;
 	}
 
 	// Note: This method is NOT USED by tests and TIRA Coders GUI.
@@ -124,14 +124,20 @@ public class SimpleContainer<E extends Comparable<E>> implements TIRAContainer<E
 
 	@Override
 	public int findIndex(Predicate<E> searcher) {
-		// TODO: Student: finish this as part of task 02.
-		throw new NotYetImplementedException("Task 02-TASK on linear search not yet implemented");
+		for(int index = 0; index < count; index++){
+			if(searcher.test(array[index]))
+			return index;
+		}
+		return -1;
 	}
 
 	@Override
 	public E find(Predicate<E> searcher) {
-		// TODO: Student: finish this as part of task 02.
-		throw new NotYetImplementedException("Task 02-TASK on linear search not yet implemented");
+		for(int index = 0; index < count; index++){
+			if(searcher.test(array[index]))
+			return array[index];
+		}
+		return null;
 	}
 
 	@Override
