@@ -67,7 +67,7 @@ public class SimpleContainer<E extends Comparable<E>> implements TIRAContainer<E
 				return array[index];
 			}
 		}
-		return null;
+		throw new IllegalArgumentException ("No element found");
 	}
 
 	@Override
@@ -192,7 +192,6 @@ public class SimpleContainer<E extends Comparable<E>> implements TIRAContainer<E
 		}
 		return toReturn;
 	}
-
 	@Override
 	public boolean isSorted() {
 		return sorted;

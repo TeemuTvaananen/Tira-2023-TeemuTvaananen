@@ -77,7 +77,35 @@ Kääntäminen on myös helpompaa toteuttaa, sillä kääntämis-algoritmin inte
 Kaikenkaikkiaan opin tämän tehtävän tekemisessä uutta ja hyödyllistä tietoa niin javan comparable-rajapinnasta kuin algoritmien toteuttamisesta yleensäkin.
 ## 02-TASK
 
-## 03-TASK
+Opin tehtävän tekemisessä toteuttamaan lineaarisen hakufunktion. Tehtävän tekeminen tuntui erittäin luontevalta ja helpolta. Vaikeinta tässä tehtävässä oli taulukon tietoja käyttäen piirtää taulukot ja saada ne näkymään tässä raportissa. Aluksi toteutin lisäyslajittelualgoritmit käyttäen Comparator-rajapintaa. Se oli aikaisemman tehtävän ansiosta jo tuttua ja itse Comparatorin käyttö tuntui loogiselta ja helpolta. Askel 2 eli uusien luokkien luominen ja testaaminen Tira-Coders-sovelluksessa testaaminen. Tämä oli myös helppoa ja kivaa. Oli mielekästä nähdä oman työn tuotos käyttöliittymässä. 
+
+Sitten askel numero 3. Tämän toteuttamisessa ei myöskään ilmennyt mitään onglemia. Ensin täytyi vaan tutustua Predicate luokkaan, jotta osasin käyttää oikeita metodeja oikealla tavalla. Tehtävänanto oli myös erittäin selkeä, mikä helpotti tehtävän tekemistä huomattavasti. 
+
+
+Toteuttamani lineaarisen hakualgoritmin tulostaulukko ja käyrät: 
+
+![Taulukko](image.png)
+![Täyttöaika](tayttoaika.png) 
+![Hakuaika](hakuaika.png)
+
+
+Kuvista ja tuloksista tein seuraavat johtopäätökset. 
+
+Täyttöajan kasvu tietosäiliön elementtien kasvuun testitulosten, kaavion tarkastamisen ja regressioanalyysin jälkeen ei noudata lineaarista kasvua vaan eksponentiaalista kasvua. Tarkemmin tarkasteltuna Excel-ohjelmassa polynomi sopii tuotettuu taulukkoon parhaiten ja antaa isoimman korrelaatiokertoimen. Tästä päättelin lyhyen Googlauksen perusteella ja tarkemman algortimin tarkastelun perusteella, että tietosäiliön kasvaessa myös uudelleenallokointiin voi olla tarvetta enemmän ja isoilla tietomäärillä siinä myös kestää. 
+
+Hakuaikoijen kasvu suhteessa tietosäiliön elementtien kasvuun. Tein tästä syntyneelle kaaviolle myös regressioanalyysin ja lineaarinen suora sopi tuloksiin melko hyvin. Testin alkaessa hakuajat ovat kuitenkin suhteellisen korkealla, kunnes 4000 elementin kohdalla hakuaika pienenee merkittävästi 89 mikrosekuntiin ja alkaa tästä lähtien kasvaa suhteellisen lineaarisesti. 
+
+Näistä päätelmistä tulin siis siihen lopputulokseen, että add-algoritmin aikakompleksisuusluokka tällä testiaineistolla on O(n^2) ja hakualgoritmien aikakompleksisuusluokat ovat O(n).
+
+
+Seuraavaksi kokeilin lajittelua Tira Coders Sovelluksessa ja huomasin, että kuten tehtävänannossa mainitaan, välillä lajittelu on nopeampaa ja välillä hitaampaa. Tämän näkee Log view ikkunasta. Jos esimerkiksi lajitellaan ensin koodarinimen perusteella niin minulla siinä kesti noin 380ms ja log viewiin tulostui, että sorting took 383ms esimerkiksi. Jos tästä sitten käännetään nimet päinvastaiseen järjestykseen niin sovellus osaakin käytää reverse-algoritmia ja tällöin lajittelussa ei kestä kuin 1-3ms. 
+
+Jos taulukko siis on valmiiksi lajiteltu niin kannattaa mieluummin vain kääntää järjestys sen sijaan, että lajittelisi taulukon kokonaan uudestaan. Reverse algoritmi toimii lineaarisesti ja käy vain kerran kaikki taulukon alkiot läpi. Lajittelualgoritmi toimii puolestaan aikakompleksisuusluokan O(n^2) mukaan ja täysin päinvastaiseen järjestykseen kääntäminen olisi tälle algoritmille ns. "worst case scenario", sillä jokainen alkio pitäisi siirtää aina taulukon alkuun. 
+
+Tässä tehtävässä toteutettuja algoritmeja kutsutaan lineaarisiksi, koska niissä käydään taulukko läpi vain kerran ja etsitään sieltä tietty arvo tai indeksi ja lopetetaan läpikäynti heti, kun tietty ehto löytyy ja palautetaan se kutsujalle. Puolestaan edellisessä tehtävässä toteutettu lisäyslajittelualgoritmi ei ole lineaarinen, koska se etsii ensimmäisenä tietyn arvon taulukosta ja sen jälkeen vielä lajittelee taulukkoa niin, että löydetty arvo löytää oikean paikan taulukossa. 
+
+Lineaaristen algoritmien aikakompleksisuusluokka big O-notaatiolla esiteltynä on O(n).
+## 03-TASK 
 
 ## 04-TASK
 
