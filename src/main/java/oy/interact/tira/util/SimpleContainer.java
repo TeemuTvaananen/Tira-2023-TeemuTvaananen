@@ -12,7 +12,7 @@ public class SimpleContainer<E extends Comparable<E>> implements TIRAContainer<E
 
 	private static final int DEFAULT_ARRAY_SIZE = 20;
 
-	private E [] array = null;
+	private E[] array = null;
 	private Class<E> clazz;
 
 	private int count = 0;
@@ -61,23 +61,28 @@ public class SimpleContainer<E extends Comparable<E>> implements TIRAContainer<E
 
 	@Override
 	public E get(E element) throws IllegalArgumentException {
-		// TODO: Student: finish this as part of task 02.
-		for(int index = 0; index < count; index++){
-			if(array[index].equals(element)){
+		for (int index = 0; index < count; index++) {
+			if (array[index].equals(element)) {
 				return array[index];
 			}
 		}
-		throw new IllegalArgumentException ("No element found");
+		throw new IllegalArgumentException("No element found");
 	}
 
 	@Override
 	public int indexOf(E element, Comparator<E> usingComparator) {
-		// TODO: Student: finish this as part of task 02.
+		if(isSorted()){
+			Algorithms.binarySearch(element, array, 0, count, usingComparator);
+		}
+		else{
 			for(int index = 0; index < count; index++){
-			if(array[index].compareTo(element) == 0){
+				if(array[index].compareTo(element) == 0){
 				return index;
 			}
 		}
+			}		
+	
+		
 		return -1;
 	}
 
@@ -124,18 +129,18 @@ public class SimpleContainer<E extends Comparable<E>> implements TIRAContainer<E
 
 	@Override
 	public int findIndex(Predicate<E> searcher) {
-		for(int index = 0; index < count; index++){
-			if(searcher.test(array[index]))
-			return index;
+		for (int index = 0; index < count; index++) {
+			if (searcher.test(array[index]))
+				return index;
 		}
 		return -1;
 	}
 
 	@Override
 	public E find(Predicate<E> searcher) {
-		for(int index = 0; index < count; index++){
-			if(searcher.test(array[index]))
-			return array[index];
+		for (int index = 0; index < count; index++) {
+			if (searcher.test(array[index]))
+				return array[index];
 		}
 		return null;
 	}
@@ -192,6 +197,7 @@ public class SimpleContainer<E extends Comparable<E>> implements TIRAContainer<E
 		}
 		return toReturn;
 	}
+
 	@Override
 	public boolean isSorted() {
 		return sorted;
@@ -207,10 +213,10 @@ public class SimpleContainer<E extends Comparable<E>> implements TIRAContainer<E
 	@Override
 	public void sort() {
 		// TODO: Student: finish this as part of task 02.
-		//tässä kutsutaan toteutettua lisäyslajittelualgoritmia ohjeen mukaisesti välillä 0..<count, jonka välillä ei ole null-arvoja
+		// tässä kutsutaan toteutettua lisäyslajittelualgoritmia ohjeen mukaisesti
+		// välillä 0..<count, jonka välillä ei ole null-arvoja
 		Algorithms.insertionSort(array, 0, count);
 	}
-
 
 	// TEACHERS: TODO: Remove the call to Algorithms sort method.
 	@Override

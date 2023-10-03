@@ -171,7 +171,7 @@ public class Algorithms {
       int right = toIndex - 1;
 
       while(left <= right){
-         int middlePointer = (left + right) / 2;
+         int middlePointer = left + ((right - left)/ 2);
 
          if(comparator.compare(aValue, fromArray[middlePointer]) == 0){
             return middlePointer;

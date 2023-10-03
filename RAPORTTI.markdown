@@ -106,7 +106,67 @@ Tässä tehtävässä toteutettuja algoritmeja kutsutaan lineaarisiksi, koska ni
 
 Lineaaristen algoritmien aikakompleksisuusluokka big O-notaatiolla esiteltynä on O(n).
 ## 03-TASK 
+Tässä tehtävässä opin tekemään puolitushakualgoritmin. Ensin katsoin kurssin tarjoamat luentokalvot ja sen jälkeen tutustuin netissä vielä aiheeseen. Video https://www.youtube.com/watch?v=NFhOrxtXXcM&t=685s auttoi hahmottamaan tämän haun toimintaa. Comparable rajapinnan mukana tulevat metodit olivat myös helppoja toteuttaa tähän algortimiin ja oikeastaan koko tehtävä itsessään oli jälleen niin selkeästi selitetty, ettei sen tekemisessä ilmennyt mitään erikoisempia haasteita ja kaikki näytti toimivan sujuvasti. Toisaalta omalla pöytäkoneellani oli ilmeisesti VScoden asetuksissa asetettu JDK:n polku jotenkin väärin, sillä aluksi näytti siltä, etteivät binarysearchtests lähde ollenkaan toimimaan. Tämäkin ongelma oli onneksi helppo korjata muokkaamalla oikea polku settings.json tiedostoon. 
 
+Tehtävän 3 analyysit:
+
+Kokeiltuani ja testailtuani hakutoimintoja Tira coders-sovelluksessa sain seuraavat tulokset.
+Ensimmäiset haut: 34ms ensimmäinen haku ja nopea haku 16ms
+Toiset haut: 22ms ja nopea haku 12ms
+
+Keskimäärin suoritusaika nopeassa haussa suhteessa ensimmäiseen hakuun on noin puolet ajasta. 
+Huomasin, että listan alusta haettuna hakuajat pienenivät merkittävästi ne olivat 1ms ja 0ms.
+ 
+Fast-search on ilmeisemmin nopeampi kuin search. Tämä johtuu siitä, että sen käyttämä puolitushakualgoritmi on nopeampi kuin lineaarinen haku
+
+
+Tehtävän 3 tulostukset taulukkoina 
+
+Binarysearch ascending order tests	:
+
+![taulukko1](image-3.png)
+
+
+
+Binarysearch descending order tests  :
+
+![taulukko2](image-4.png)
+
+ASCEDING ORDER TESTS KÄYRÄT: 
+
+![taytto1](image-10.png)
+
+![lajittelu1](image-11.png)
+
+![haku1](image-1.png)
+
+
+
+DESCENDING ORDERTESTS KÄYRÄT
+
+![taytto2](image-2.png)
+
+
+![lajittelu2](image-5.png)
+
+![haku2](image-6.png)
+
+Yleisesti ottaen puolitushakualgoritmi tuo etua, kun haetaan tiettyä indeksiä valmiiksi lajitellusta taulukosta. Kuten huomataan myös testin Binarysearch tuloksista :
+ 
+Average linear search duration:    2345860 ns == noin 2.35ms
+Average binary search duration:      20560 ns == noin 0.02056ms
+
+Average linear search duration:     368940 ns == noin 0.369ms
+Average binary search duration:      30600 ns == noin 0.0306ms
+
+
+Puolitushakua kannattaa siis käyttää, kun kyseessä on isokokoinen ja valmiiksi lajiteltu tietotaulukko, josta halutaan etsiä jonkin tietty alkio. 
+
+Lineaarisen hakualgoritmin aikakompleksisuusluokka on O(n). Tämä johtuu siitä, että taulukon jokaista alkiota tarkastellaan vain kerran kunnes tietty arvo löytyy tai taulukko on käyty läpi. N ollessa esimerkiksi 50 algoritmin iteraatioiden määrä on korkeintaan 50.
+
+Puolitushakualgoritmin aikakompleksisuusluokka puolestaan on O(log n) eli logaritminen. Tämä johtuu siitä, että hakualue jaetaan jokakerralla kahtia, joten algoritmin täytyy tällöin suorittaa korkeintaan log2(n) iteraatiota, missä n on hakualueen koko. 
+
+Kaikenkaikkiaan tehtävä oli helppo toteuttaa kiitos hyvän tehtävänannon ja muun ohjeistuksen.
 ## 04-TASK
 
 ## 05-TASK
