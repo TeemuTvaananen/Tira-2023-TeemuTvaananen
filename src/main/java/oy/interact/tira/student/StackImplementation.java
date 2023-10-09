@@ -1,74 +1,121 @@
 package oy.interact.tira.student;
 
-import java.util.Arrays;
 import oy.interact.tira.util.StackInterface;
 
-public class StackImplementation <E> implements StackInterface {
+public class StackImplementation<E> implements StackInterface<E> {
 
-    private Object [] itemArray;
-    private int latestIndex = 0;
-    private static final int DEFAULT_STACK_SIZE = 20;
-    private int size;
+    private Object[] itemArray;
+    private int latestIndex;
+    private static final int DEFAULT_STACK_SIZE = 10;
+    private int itemCount;
 
-    public StackImplementation(){
+    public StackImplementation() {
         this.itemArray = new Object[DEFAULT_STACK_SIZE];
-        this.size = 0;
+        this.latestIndex = -1;
+        this.itemCount = 0;
     }
 
-    public StackImplementation(int arraySize){
+    public StackImplementation(int arraySize) {
         this.itemArray = new Object[arraySize];
-        this.size = 0;
+        this.latestIndex = -1;
+        this.itemCount = 0;
     }
 
     @Override
     public int capacity() {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'capacity'");
+        return itemArray.length;
     }
 
     @Override
-    public void push(Object element) throws OutOfMemoryError, NullPointerException {
-        if(element == null){
-            throw new NullPointerException("Cannot add a null element to Stack!")
+    public void push(E element) throws OutOfMemoryError, NullPointerException {
+        if (element == null) {
+            throw new NullPointerException("Cannot add a null element to the Stack!");
         }
 
-        if(size == itemArray.length){
-            reallocate();
+        if (itemCount == itemArray.length) {
+        checkStackCapacity();
         }
+        itemArray[++latestIndex] = element;
+        itemCount++;
+        
 
-        itemArray[latestIndex++] = element;
     }
 
     @Override
-    public Object pop() throws IllegalStateException {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'pop'");
+    public E pop() throws IllegalStateException {
+        if (isEmpty()) {
+            throw new IllegalStateException("Stack is empty");
+        }
+        E element = peek();
+        
+        itemArray[latestIndex] = null;
+        latestIndex--;
+        itemCount--;
+          
+       return element;
     }
 
+    @SuppressWarnings("unchecked")
     @Override
-    public Object peek() throws IllegalStateException {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'peek'");
+    public E peek() throws IllegalStateException {
+        if (isEmpty()) {
+            throw new IllegalStateException("The stack is empty");
+        }
+        E item = (E) itemArray[latestIndex];
+        return item;
     }
 
     @Override
     public int size() {
-      return size;
+        return latestIndex + 1;
     }
 
     @Override
     public boolean isEmpty() {
-        return itemArray == null || itemArray.length == 0;
-   }
+        return latestIndex == -1;
+    }
 
     @Override
     public void clear() {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'clear'");
+        itemArray = new Object[DEFAULT_STACK_SIZE];
+        itemCount = 0;
+        latestIndex = -1;
     }
-    
-    private void reallocate(){
-        int length = itemArray.length * 2;
-        Object [] reallocated = Arrays.copyOf(itemArray, length);
-     }
+
+    private void checkStackCapacity() {
+        
+            int reallocatedLength = itemArray.length * 2;
+
+            //tarkistin muistin ylittymiselle
+            if (reallocatedLength >= Integer.MAX_VALUE) {
+                throw new OutOfMemoryError("No room in the stack!");
+            }
+            Object[] reallocated = new Object[reallocatedLength];
+
+            for (int index = 0; index <= latestIndex; index++) {
+                reallocated[index] = itemArray[index];
+            }
+            itemArray = reallocated;
+        
+    }
+
+    @Override
+    public String toString() {
+        StringBuilder stackStringBuilder = new StringBuilder();
+        stackStringBuilder.append("[");
+
+        for (int index = 0; index < itemCount; index++) {
+            if (itemArray[index] == null) {
+                continue;
+            }
+            stackStringBuilder.append(itemArray[index]);
+            if (index < itemCount - 1) {
+                stackStringBuilder.append(", ");
+            }
+        }
+
+        stackStringBuilder.append("]");
+        return stackStringBuilder.toString();
+    }
+
 }
