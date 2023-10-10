@@ -82,6 +82,7 @@ public class StackImplementation<E> implements StackInterface<E> {
         latestIndex = -1;
     }
 
+    //Own method for reallocating the stack
     private void checkStackCapacity() {
         
             int reallocatedLength = itemArray.length * 2;

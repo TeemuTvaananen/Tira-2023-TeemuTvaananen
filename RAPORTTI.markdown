@@ -168,6 +168,31 @@ Puolitushakualgoritmin aikakompleksisuusluokka puolestaan on O(log n) eli logari
 
 Kaikenkaikkiaan tehtävä oli helppo toteuttaa kiitos hyvän tehtävänannon ja muun ohjeistuksen.
 ## 04-TASK
+``Disclaimer: Pohdin tehtävän toteutusta ja debuggaamista yhdessä opiskelija Esko Hautalan kanssa.``
+
+Opin tehtävän tekemisessä paljon siitä mikä pino tietorakenne on Java-ohjelmointikielessä ja mitä kaikkia metodeja ja keinoja sen muokkaamiseen voi käyttää. Mielestäni onnistuin kirjoittamaan oman toteutukseni pinoluokasta siten, että se vastasi tehtävänannossa annettuja aikakompleksisuusvaatimuksia. Käytin silmukkaa ainoastaan siinä, kun pinon kapasiteetti täytyy reallokoida ja myös tulosteessa eli toString-metodissa. Muissa metodeissa onnistuin tekemään kaiken ilman silmukoita.
+
+Vaikeinta tässä tehtävän tekemisessä oli tarkistimen toteuttaminen. Ohessa olen kirjoittanut sen toimintalogiikan. 
+
+1. Ensimmäisenä olen nimennyt tarvittavat muuttujat tarkistimen toteutukseen. ParenthesisTotal on lopullinen sulkumerkkien määrä, lineNumber ja columnNumber kuvastavat rivi ja sarakenumeroita, betweenQuotes:ia käytetään, kun tarkistetaan ollaanko lainausmerkkien välissä.
+
+2. Käynnistetään silmukka ja aletaan käymään annettua merkkijonoa merkki merkiltä läpi. LineNumber muuttuja alkaa luonnollisesti riviltä 1 ja columnNumber-muuttujaa kasvatetaan sen mukaan, kun merkkejä tulee käytyä läpi. Jokaisella iteraatiolla varataan muuttujaan IndexChar kyseisen iteraation tarkastelun kohteena oleva merkki. 
+
+3. Ensimmäisenä tarkistellaan ollaanko kohdattu lainausmerkki ja ollaanko niitten välissä. Jos kohdataan lainausmerkki muutetaan betweenQuotes muuttujan arvoa true arvoon. Nyt olemme siis lainausmerkkien välissä ja täytyy ottaa se huomioon. Tälle löytyy oma tarkastin, joka jättää huomiotta kaikki merkit niin kauan kuin ollaan lainausmerkkien välissä eli, kun betweenQuotes on true. Toisen lainausmerkin tullessa vastaan betweenQuotes muuttuu false arvoon ja tällöin tarkistin siirtyy tarkastelemaan, mikä merkki on kyseessä. 
+
+4. Nyt katsotaan onko iteraation merkki joku sulkevista suluista eli ( { tai [. Jos vastaavuus löytyy, yritetään puskea tämä merkki pinoon käyttämällä stack.push- metodia. Jos tämä epäonnistuu niin tarkistin heittää ilmoille virheilmoituksen hyödyntäen ParenthesisException-luokkaa ja tämän switch case:ia STACK_FAILURE. Viestissä on myös rivi ja sarakenumero. Jos puskeminen onnistuu niin kasvatetaan sulkumerkkien eli parenthesisTotal-muuttujan määrää.
+
+5. Seuraavaksi katsotaan onko kyseinen merkki joku sulkumerkeistä eli ) } tai ]. Jos vastaavuus löytyy, täytyy varmistaa tässä vaiheessa, että onko pino tyhjä. Jos se on tyhjä, tällöin sululle ei ole vastaavaa sulkevaa sulkua ja syötteessä on tällöin syntaksivirhe. Jos pino ei puolestaan ole tyhjä otetaan pinosta ylimmäinen elementti tarkasteluun käyttämällä stack.pop-metodia ja varataan se muuttujaan expected. Tässä vaiheessa voidaan myös kasvattaa kokonaissulkujen määrää.
+
+6. Nyt siirrytään lähempään tarkasteluun ja katsotaan löytyykö tälle pinosta otetulle merkille vastaavuus merkistä, jota käsitellään iteraatiossa. Tarkistetaan siis, että jos indexChar muuttujassa on '(' niin pinosta otettu merkki täytyy olla ')' ja niin edelleen. Jos näin ei ole, on syötteessä virhe ja tarkistin heittää virheilmoituksen käyttäen hyväksi ParenthesisException luokkaa ja sen sisältämässä switch rakenteen case:ssa olevaa PARENTHESIS_IN_WRONG_ORDER. Virheilmoituksessa on myös rivi ja sarakenumero. Muutoin on löytynyt vastaavuus ja siirrytään eteenpäin.
+
+7. Nyt tarkistetaan onko iteraation käsittelemä merkki rivinvaihtomerkki. Jos näin on niin kasvatetaan rivinumeromuuttujaa ja "resetoidaan sarakenumeromuuttuja".
+
+8. Viimeisenä, kun tarkistin on käynyt koko merkkijonon loppuun silmukassa tarkastetaan vielä onko pinoon jäänyt jotain. Jos on voidaan tehtävänannon mukaisesti olettaa, että pinossa on liian vähän sulkevia sulkumerkkejä. Tästä tarkistin myös huomauttaa heittämällä virheilmoituksen TOO_MANY_CLOSING_TAGS ParenthesisException luokasta. Virheilmoituksessa on myös rivi ja sarakenumero. 
+
+9. Lopulta, jos kaikki on mennyt suunnitelmien mukaan ja tarkistin ei ole löytänyt huomautettavaa, palautetaan lopullinen yhteenlaskettu sulkumerkkien määrä eli kokonaislukumuuttuja parenthesisTotal. 
+
+Tämä tehtävä loi haastavuutta erityisesti bugien ilmaantuessa, mutta lopulta sain tehtyä mielestäni tehtävänannon täyttävän ja loogisen kokonaisuuden ja opin paljon uutta ja hyödyllistä tietoa.
 
 ## 05-TASK
 
