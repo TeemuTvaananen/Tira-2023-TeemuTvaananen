@@ -195,6 +195,11 @@ Vaikeinta tässä tehtävän tekemisessä oli tarkistimen toteuttaminen. Ohessa 
 Tämä tehtävä loi haastavuutta erityisesti bugien ilmaantuessa, mutta lopulta sain tehtyä mielestäni tehtävänannon täyttävän ja loogisen kokonaisuuden ja opin paljon uutta ja hyödyllistä tietoa.
 
 ## 05-TASK
+Lähtiessäni toteuttamaan tehtävää halusin toteuttaa sen alusta alkaen käyttämällä linkitettyä listaa. Halusin näin oppia jotain uutta perinteisen taulukkopohjaisen toteutuksen sijaan ja näin haastaa itseäni. Katsoin siis ensimmäisenä luentomateriaalit aiheesta ja sitten tutustuin netistä löytyviin materiaaleihin. Kuten https://www.geeksforgeeks.org/queue-linked-list-implementation/. Tämän ja tehtävänannon tarjoaman materiaalin pohjalta tehtävä oli loppujen lopuksi helppo ja jokseenkin selkeästi toteutettavissa.
+
+Linkitetyn listan käyttämisessä on joitakin hyötyjä. Muistin reallokoinnille ei ole tarvetta, sillä linkitetyn listan kapasiteettina muistin käyttämiselle on käytännössä tietokoneen RAM-muisti. Näin ollen, jos tämän tehtävän tapauksessa luotavan jonon kokoa ei tiedetä, voi olla järkevämpää käyttää linkitettyä listaa. Taulukko päihittää linkitetyn listan silloin esimerkiksi kun tiedetään etukäteen alkioiden määrä, jotka aiotaan lisätä jonoon. Taulukko käyttää myös vähemmän muistia, sillä siinä ei tarvitse lisätä linkkejä muihin alkioihin datan lisäksi. 
+
+Kokonaisuudessaan tehtävä oli helppo selkeän tehtävänannon ja luentomateriaalin johdosta. Opin tehtävän tekemisessä paljon uutta linkitetystä listasta ja muistin allkoinnista kirjoitettaessa ohjelmia. 
 
 ## 06-TASK
 

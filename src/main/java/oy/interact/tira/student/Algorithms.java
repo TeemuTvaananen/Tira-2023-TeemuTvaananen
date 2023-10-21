@@ -1,6 +1,7 @@
 package oy.interact.tira.student;
 
 import java.util.Comparator;
+import java.lang.reflect.Array;
 
 public class Algorithms {
 
@@ -88,7 +89,6 @@ public class Algorithms {
    ////////////////////////////////////////////////////////////
 
    public static <T> void insertionSort(T[] array, int fromIndex, int toIndex, Comparator<T> comparator) {
-      // ei vielä dokumentoitu.. osa 02 kesken
       for (int i = fromIndex + 1; i < toIndex; i++) {
          T point = array[i];
          int currentIndex = i - 1;
@@ -170,14 +170,14 @@ public class Algorithms {
       int left = fromIndex;
       int right = toIndex - 1;
 
-      while(left <= right){
-         int middlePointer = left + ((right - left)/ 2);
+      while (left <= right) {
+         int middlePointer = left + ((right - left) / 2);
 
-         if(comparator.compare(aValue, fromArray[middlePointer]) == 0){
+         if (comparator.compare(aValue, fromArray[middlePointer]) == 0) {
             return middlePointer;
-         } else if(comparator.compare(aValue, fromArray[middlePointer]) < 0){
+         } else if (comparator.compare(aValue, fromArray[middlePointer]) < 0) {
             right = middlePointer - 1;
-         } else{
+         } else {
             left = middlePointer + 1;
          }
       }
@@ -185,15 +185,134 @@ public class Algorithms {
    }
 
    public static <E extends Comparable<E>> void fastSort(E[] array) {
-      // TODO: Student, implement this.
+      mergeSortComparable(array);
+
    }
 
    public static <E> void fastSort(E[] array, Comparator<E> comparator) {
-      // TODO: Student, implement this.
+      mergeSortComparator(array, 0, array.length, comparator);
    }
 
    public static <E> void fastSort(E[] array, int fromIndex, int toIndex, Comparator<E> comparator) {
-      // TODO: Student, implement this.
+      mergeSortComparator(array, fromIndex, toIndex, comparator);
+
    }
 
+   // MERGE SORT METHODS FOR TASK 06
+   @SuppressWarnings("unchecked")
+   private static <E> void mergeSortComparator(E[] array, int fromIndex, int toIndex, Comparator<E> comparator) {
+      int arrayLength = array.length;
+
+      if (arrayLength < 1) {
+         return;
+      }
+
+      if (fromIndex >= toIndex - 1) {
+         return;
+      }
+
+      int middlePointer = arrayLength / 2;
+      E[] leftHalf = (E[]) Array.newInstance(array.getClass().getComponentType(), middlePointer);
+      E[] rightHalf = (E[]) Array.newInstance(array.getClass().getComponentType(), array.length - middlePointer);
+
+      // copy the arrays
+      for (int index = 0; index < middlePointer; index++) {
+         leftHalf[index] = array[index];
+      }
+
+      for (int index = middlePointer; index < arrayLength; index++) {
+         rightHalf[index - middlePointer] = array[index];
+      }
+
+      // recursive calls for both halves
+
+      mergeSortComparator(leftHalf, 0, leftHalf.length, comparator);
+      mergeSortComparator(rightHalf, 0, rightHalf.length, comparator);
+      mergeComparator(array, leftHalf, rightHalf, comparator);
+
+   }
+
+   @SuppressWarnings("unchecked")
+   private static <E extends Comparable<E>> void mergeSortComparable(E[] array) {
+      int arrayLength = array.length;
+
+      if (arrayLength < 1) {
+         return;
+      }
+      if (0 >= arrayLength - 1) {
+         return;
+      }
+
+      int middlePointer = arrayLength / 2;
+      E[] leftHalf = (E[]) Array.newInstance(array.getClass().getComponentType(), middlePointer);
+      E[] rightHalf = (E[]) Array.newInstance(array.getClass().getComponentType(), array.length - middlePointer);
+
+      // copy the arrays
+      for (int index = 0; index < middlePointer; index++) {
+         leftHalf[index] = array[index];
+      }
+
+      for (int index = middlePointer; index < arrayLength; index++) {
+         rightHalf[index - middlePointer] = array[index];
+      }
+
+      // recursive calls to MergeSort both halves
+
+      mergeSortComparable(leftHalf);
+      mergeSortComparable(rightHalf);
+      mergeComparable(array, leftHalf, rightHalf);
+
+   }
+
+   // helper method for merging two arrays using the Comparable interface
+   private static <E extends Comparable<E>> void mergeComparable(E[] array, E[] leftHalf, E[] rightHalf) {
+      int leftHalfSize = leftHalf.length;
+      int rightHalfSize = rightHalf.length;
+
+      int leftIndex = 0, rightIndex = 0, mergeIndex = 0;
+
+      while (leftIndex < leftHalfSize && rightIndex < rightHalfSize) {
+         if ((leftHalf[leftIndex].compareTo(rightHalf[rightIndex])) <= 0) {
+            array[mergeIndex++] = leftHalf[leftIndex++];
+         } else {
+            array[mergeIndex++] = rightHalf[rightIndex++];
+         }
+
+      }
+
+      while (leftIndex < leftHalfSize) {
+         array[mergeIndex++] = leftHalf[leftIndex++];
+
+      }
+      while (rightIndex < rightHalfSize) {
+         array[mergeIndex++] = rightHalf[rightIndex++];
+
+      }
+
+   }
+
+   // helper method for the mergeSortAlgorithm using the Comparator
+   private static <E> void mergeComparator(E[] array, E[] leftHalf, E[] rightHalf, Comparator<E> comparator) {
+
+      int leftHalfSize = leftHalf.length;
+      int rightHalfSize = rightHalf.length;
+
+      int leftIndex = 0, rightIndex = 0, mergeIndex = 0;
+
+      while (leftIndex < leftHalfSize && rightIndex < rightHalfSize) {
+         if (comparator.compare(leftHalf[leftIndex], rightHalf[rightIndex]) <= 0) {
+            array[mergeIndex++] = leftHalf[leftIndex++];
+         } else {
+            array[mergeIndex++] = rightHalf[rightIndex++];
+         }
+      }
+
+      while (leftIndex < leftHalfSize) {
+         array[mergeIndex++] = leftHalf[leftIndex++];
+
+      }
+      while (rightIndex < rightHalfSize) {
+         array[mergeIndex++] = rightHalf[rightIndex++];
+      }
+   }
 }
