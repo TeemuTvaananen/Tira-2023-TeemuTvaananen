@@ -220,6 +220,8 @@ Sitten tulokset CoderSlowComparatorTests taulukossa ja kuva graafista joka on te
 Taulukon tuloksista ja graafeista voidaan havaita seuraavia asioita:
 -Nopean lajittelualgoritmin aika per elementti ei muutu niin merkittävästi aineiston kasvaessa kuin mitä hitaan lajittelualgoritmin vaan ne pysyvät melkeinpä samana koko ajan. Näin ollen algoritmi on tehokas ja pystyy täyttämään tehtävän vaatimuksen ( O(nlogn) ) aikakompleksisuuden suhteen.
 -Hitaalla lajittelualgoritimilla aika per elementti nousee myös merkittävästi aineiston kasvaessa.
+
+-Kaiken kaikkiaan opin tehtävän tekemisessä paljon uutta nopeista lajittelualgoritmeista ja tehtävä oli erittäin mielenkiintoinen ja opettavainen
 ## 07-TASK
 
 ## 08-TASK
