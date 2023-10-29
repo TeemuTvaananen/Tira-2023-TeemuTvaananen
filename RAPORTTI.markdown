@@ -202,7 +202,24 @@ Linkitetyn listan käyttämisessä on joitakin hyötyjä. Muistin reallokoinnill
 Kokonaisuudessaan tehtävä oli helppo selkeän tehtävänannon ja luentomateriaalin johdosta. Opin tehtävän tekemisessä paljon uutta linkitetystä listasta ja muistin allkoinnista kirjoitettaessa ohjelmia. 
 
 ## 06-TASK
+Tehtävän aluksi mietin, että minkä algoritmin haluaisin oikein toteuttaa. Katsoin luentomateriaalista esimerkkejä ja myös netistä esimerkiksi https://www.geeksforgeeks.org/quick-sort/ ja myös https://www.geeksforgeeks.org/merge-sort/. Näistä lopulta päätin toteuttaa jälkimmäisen eli Merge Sort-lajittelualgoritmin. Päätökseen vaikutti erityisesti algoritmin loogisuus ja tuntui mielenkiintoiselta ja houkuttelevalta kokeilla tätä "hajoita ja hallitse" logiikkaa.
 
+Tehtävän toteutus itsessään oli melko haastava ja aluksi tuntui erittäin puuduttavalta. Lopulta kuitenkin taisteltuani comparatorien kanssa pääsin tavoitteeseeni tehtävän kanssa ja onnistuin luomaan hyvän mergesort-lajittelualgoritmin. 
+
+Ohessa on  CodersFastComparatorTests tulokset taulukossa ja kuva graafista joka on piirretty taulukon elementtien kasvusta lajittelun keston suhteen.  
+ ![FastSortTaulukko](image-7.png)
+![FastSortGraafi](image-9.png)
+
+Sitten tulokset CoderSlowComparatorTests taulukossa ja kuva graafista joka on tehty samalla periaatteella kuin ylempi.
+
+
+
+![SlowSortTaulukko](image-12.png)
+![SlowSortGraafi](image-8.png)
+
+Taulukon tuloksista ja graafeista voidaan havaita seuraavia asioita:
+-Nopean lajittelualgoritmin aika per elementti ei muutu niin merkittävästi aineiston kasvaessa kuin mitä hitaan lajittelualgoritmin vaan ne pysyvät melkeinpä samana koko ajan. Näin ollen algoritmi on tehokas ja pystyy täyttämään tehtävän vaatimuksen ( O(nlogn) ) aikakompleksisuuden suhteen.
+-Hitaalla lajittelualgoritimilla aika per elementti nousee myös merkittävästi aineiston kasvaessa.
 ## 07-TASK
 
 ## 08-TASK
