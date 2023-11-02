@@ -8,6 +8,7 @@ import oy.interact.tira.util.TIRAKeyedOrderedContainer;
 import oy.interact.tira.util.Visitor;
 
 public class BinarySearchTreeContainer<K extends Comparable<K>, V> implements TIRAKeyedOrderedContainer<K, V> {
+
     private class TreeNode {
         private K key;
         private V value;
@@ -21,9 +22,8 @@ public class BinarySearchTreeContainer<K extends Comparable<K>, V> implements TI
             this.right = null;
         }
 
-
-
     }
+
     TreeNode root;
     private Comparator<K> comparator;
     int size;
@@ -41,26 +41,12 @@ public class BinarySearchTreeContainer<K extends Comparable<K>, V> implements TI
         size++;
     }
 
-    private TreeNode addHelper(TreeNode node, K key, V value) {
-        if (node == null) {
-            return new TreeNode(key, value);
-        }
-        
-        if (comparator.compare(key, node.key) < 0) {
-            node.left = addHelper(node.left, key, value);
-        } else if (comparator.compare(key, node.key) > 0) {
-            node.right = addHelper(node.right, key, value);
-        }
-    
-        return node;
-    }
-
     @Override
     public V get(K key) throws IllegalArgumentException {
         if (key == null) {
             throw new IllegalArgumentException("The key is null");
         }
-        return null;
+        return getHelper(root, key);
     }
 
     @Override
@@ -68,7 +54,10 @@ public class BinarySearchTreeContainer<K extends Comparable<K>, V> implements TI
         if (key == null) {
             throw new IllegalArgumentException("The key is null");
         }
-        return null;
+
+        root = removeHelper(root, key);
+
+        return root != null ? root.value : null;
     }
 
     @Override
@@ -96,8 +85,8 @@ public class BinarySearchTreeContainer<K extends Comparable<K>, V> implements TI
 
     @Override
     public void clear() {
-     root = null;
-     size = 0;
+        root = null;
+        size = 0;
     }
 
     @Override
@@ -129,5 +118,53 @@ public class BinarySearchTreeContainer<K extends Comparable<K>, V> implements TI
         // TODO Auto-generated method stub
         throw new UnsupportedOperationException("Unimplemented method 'accept'");
     }
+
+    // helper methods
+
+    private TreeNode addHelper(TreeNode node, K key, V value) {
+        if (node == null) {
+            return new TreeNode(key, value);
+        }
+
+        if (comparator.compare(key, node.key) < 0) {
+            node.left = addHelper(node.left, key, value);
+        } else if (comparator.compare(key, node.key) > 0) {
+            node.right = addHelper(node.right, key, value);
+        }
+
+        return node;
+    }
+
+    private V getHelper(TreeNode node, K key) {
+        if (node == null) {
+            return null;
+        }
+
+        if (comparator.compare(key, node.key) == 0) {
+            return node.value;
+        } else if (comparator.compare(key, node.key) < 0) {
+            return getHelper(node.left, key);
+        } else {
+            return getHelper(node.right, key);
+        }
+    }
+
+        private TreeNode removeHelper(TreeNode node, K key){
+            if(node == null){
+                return node;
+            }
+            int comparatorResult = comparator.compare(key, node.key);
+
+            if(comparatorResult < 0){
+                node.left = removeHelper(node.left, key);
+            } else if(comparatorResult > 0){
+                node.right = removeHelper(node.right, key);
+            } else{
+                // todo: finish this, the key is found here to be deleted
+                //according to the amount of children the node has
+            }
+            return node;
+            
+        }
 
 }
