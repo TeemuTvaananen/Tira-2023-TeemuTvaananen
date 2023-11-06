@@ -1,6 +1,5 @@
 package oy.interact.tira.factories;
 
-import oy.interact.tira.NotYetImplementedException;
 import oy.interact.tira.model.Coder;
 import oy.interact.tira.student.QueueImplementation;
 import oy.interact.tira.util.QueueInterface;

@@ -2,10 +2,10 @@ package oy.interact.tira.student;
 
 import java.util.Comparator;
 import java.util.function.Predicate;
-
 import oy.interact.tira.util.Pair;
 import oy.interact.tira.util.TIRAKeyedOrderedContainer;
 import oy.interact.tira.util.Visitor;
+import java.util.concurrent.atomic.AtomicInteger;
 
 public class BinarySearchTreeContainer<K extends Comparable<K>, V> implements TIRAKeyedOrderedContainer<K, V> {
 
@@ -68,10 +68,10 @@ public class BinarySearchTreeContainer<K extends Comparable<K>, V> implements TI
 
     @Override
     public V find(Predicate<V> searcher) {
-      if(root.equals(null)){
-        return null;
-      }
-       return findNode(root, searcher);
+        if (root.equals(null)) {
+            return null;
+        }
+        return findNode(root, searcher);
     }
 
     @Override
@@ -97,16 +97,24 @@ public class BinarySearchTreeContainer<K extends Comparable<K>, V> implements TI
         size = 0;
     }
 
+    @SuppressWarnings("unchecked")
     @Override
     public Pair<K, V>[] toArray() throws Exception {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'toArray'");
+        if (root.equals(null)) {
+            return (Pair<K, V>[]) new Pair[0];
+        }
+        Pair<K, V>[] array = (Pair<K, V>[]) new Pair[size];
+        AtomicInteger index = new AtomicInteger(0);
+
+        toArrayHelp(root, array, index);
+        return array;
+
     }
 
     @Override
     public int indexOf(K itemKey) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'indexOf'");
+        AtomicInteger index = new AtomicInteger(0);
+        return indexOfHelper(root, itemKey, index);
     }
 
     @Override
@@ -198,25 +206,54 @@ public class BinarySearchTreeContainer<K extends Comparable<K>, V> implements TI
         return node;
     }
 
-
-    private V findNode(TreeNode<K, V> node, Predicate<V> explorer){
+    private V findNode(TreeNode<K, V> node, Predicate<V> explorer) {
         V leftSearch = findNode(node.left, explorer);
         V rightSearch = findNode(node.right, explorer);
 
-        if(node.equals(null)){
+        if (node.equals(null)) {
             return node.value;
         }
-        
-        if(explorer.test(node.value)){
+
+        if (explorer.test(node.value)) {
             return node.value;
         }
-        
-        if(leftSearch != null){
+        if (leftSearch != null) {
             return leftSearch;
         }
-        if(rightSearch != null){
+        if (rightSearch != null) {
             return rightSearch;
         }
         return null;
+    }
+
+    private void toArrayHelp(TreeNode<K, V> node, Pair<K, V>[] array, AtomicInteger index) {
+        if (!node.equals(null)) {
+            toArrayHelp(node.left, array, index);
+            array[index.getAndIncrement()] = new Pair<>(node.key, node.value);
+            toArrayHelp(node.right, array, index);
+        }
+    }
+
+    private int indexOfHelper(TreeNode<K, V> node, K key, AtomicInteger index) {
+        if (node.equals(null)) {
+            return -1;
+        }
+
+        index.incrementAndGet();
+
+        int comparatorResult = comparator.compare(key, node.key);
+
+        if (comparatorResult < 0) {
+            return indexOfHelper(node.left, key, index);
+        } else if (comparatorResult > 0) {
+            return indexOfHelper(node.right, key, index);
+        } 
+        else {
+            if (key.equals(node.key)) {
+                return index.get() - 1;
+            } else {
+                return -1;
+            }
+        }
     }
 }

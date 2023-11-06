@@ -59,8 +59,8 @@ public interface TIRAKeyedContainer<K extends Comparable<K>, V> {
 	V find(Predicate<V> searcher);
 
 	/**
-	 * The number of key-value pairs in the container.
-	 * 
+	 * The number of key-value pairs in the containe.
+	 * r
 	 * @return The number of pairs in container.
 	 */
 	int size();
