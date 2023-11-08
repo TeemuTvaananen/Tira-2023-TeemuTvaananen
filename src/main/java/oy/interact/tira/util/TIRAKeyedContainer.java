@@ -11,8 +11,8 @@ import java.util.function.Predicate;
  * 
  * The key elements must implement the Comparable interface.
  * Note that in this project, the equals and Comparable differ
- * from the recommended. That is, the usual situation (x.compareTo(y)==0) == (x.equals(y))
- * does _not_ hold. See also the `Coder` class comments, which is used as K in this project.
+ * from the recommended.= (x.equals(y))
+ * does _not_ hold. See also the `Coder` class comments, which is used as K in this project. That is, the usual situation (x.compareTo(y)==0) =
  */
 public interface TIRAKeyedContainer<K extends Comparable<K>, V> {
 	/**

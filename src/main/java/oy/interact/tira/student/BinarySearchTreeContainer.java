@@ -2,19 +2,19 @@ package oy.interact.tira.student;
 
 import java.util.Comparator;
 import java.util.function.Predicate;
-
 import oy.interact.tira.util.Pair;
 import oy.interact.tira.util.TIRAKeyedOrderedContainer;
 import oy.interact.tira.util.Visitor;
+
 import java.util.concurrent.atomic.AtomicInteger;
 
 public class BinarySearchTreeContainer<K extends Comparable<K>, V> implements TIRAKeyedOrderedContainer<K, V> {
 
-    private class TreeNode<K extends Comparable<K>, V> {
+    private class TreeNode<K, V> {
         private K key;
         private V value;
-        TreeNode<K, V> left;
-        TreeNode<K, V> right;
+        private TreeNode<K, V> left;
+        private TreeNode<K, V> right;
 
         public TreeNode(K key, V value) {
             this.key = key;
@@ -25,7 +25,7 @@ public class BinarySearchTreeContainer<K extends Comparable<K>, V> implements TI
 
     }
 
-    TreeNode<K, V> root;
+    private TreeNode<K, V> root;
     private Comparator<K> comparator;
     private int size;
 
@@ -36,12 +36,21 @@ public class BinarySearchTreeContainer<K extends Comparable<K>, V> implements TI
 
     @Override
     public void add(K key, V value) {
+        if (size >= Integer.MAX_VALUE) {
+            throw new OutOfMemoryError("Maximum size exceeded");
+        }
         if (key == null || value == null) {
             throw new IllegalArgumentException("The key or value was null");
         }
-        insertNode(root, key, value);
-        size++;
 
+        if (root == null) {
+            root = new TreeNode<K, V>(key, value);
+            size++;
+        } else {
+            if (insertNode(root, key, value)) {
+                size++;
+            }
+        }
     }
 
     @Override
@@ -49,8 +58,7 @@ public class BinarySearchTreeContainer<K extends Comparable<K>, V> implements TI
         if (key == null) {
             throw new IllegalArgumentException("The key is null");
         }
-
-        return search(root, key);
+        return getHelper(root, key);
     }
 
     @Override
@@ -58,9 +66,7 @@ public class BinarySearchTreeContainer<K extends Comparable<K>, V> implements TI
         if (key == null) {
             throw new IllegalArgumentException("The key is null");
         }
-
         TreeNode<K, V> newRoot = deleteNode(root, key);
-
         if (newRoot != null) {
             size--;
             root = newRoot;
@@ -84,13 +90,11 @@ public class BinarySearchTreeContainer<K extends Comparable<K>, V> implements TI
 
     @Override
     public int capacity() {
-        throw new UnsupportedOperationException("Unimplemented method 'Capacity'");
-
+        return size;
     }
 
     @Override
     public void ensureCapacity(int capacity) throws OutOfMemoryError, IllegalArgumentException {
-        // TODO Auto-generated method stub
         throw new UnsupportedOperationException("Unimplemented method 'ensureCapacity'");
     }
 
@@ -102,78 +106,101 @@ public class BinarySearchTreeContainer<K extends Comparable<K>, V> implements TI
 
     @SuppressWarnings("unchecked")
     @Override
-    public Pair<K, V>[] toArray() throws Exception {
+    public Pair<K, V>[] toArray() {
         if (root == null) {
             return (Pair<K, V>[]) new Pair[0];
         }
         Pair<K, V>[] array = (Pair<K, V>[]) new Pair[size];
         AtomicInteger index = new AtomicInteger(0);
-
         toArrayHelp(root, array, index);
         return array;
-
     }
 
     @Override
     public int indexOf(K itemKey) {
+        if (root == null) {
+            return -1;
+        }
         AtomicInteger index = new AtomicInteger(0);
-        return indexOfHelper(root, itemKey, index);
+        StackImplementation<TreeNode<K, V>> nodes = new StackImplementation<>();
+
+        TreeNode<K, V> current = root;
+        TreeNode<K, V> parent = null;
+
+        while (!nodes.isEmpty() || current != null) {
+            if (current != null) {
+                nodes.push(current);
+                parent = current;
+                current = current.left;
+            } else {
+                parent = nodes.pop();
+                current = parent.right;
+                if(parent.key.equals(itemKey)){
+                    return index.get();
+                }
+                index.incrementAndGet();
+            }
+
+        }
+        return -1;
     }
 
     @Override
     public Pair<K, V> getIndex(int index) throws IndexOutOfBoundsException {
         if (index < 0 || index >= size) {
-            throw new IndexOutOfBoundsException("The index is out of bounds");
+            throw new IndexOutOfBoundsException("The given index is not valid.");
         }
-        AtomicInteger currentIndex = new AtomicInteger(0);
-        return getIndexHelper(root, currentIndex, index);
+        return getIndexHelper(root, new AtomicInteger(0), index);
     }
 
     @Override
     public int findIndex(Predicate<V> searcher) {
-        AtomicInteger currentIndex = new AtomicInteger(0);
-        AtomicInteger toBeFound = new AtomicInteger(-1);
-
-        findIndexHelper(root, searcher, currentIndex, toBeFound);
-        return toBeFound.get();
+        AtomicInteger index = new AtomicInteger(0);
+        return findIndexHelper(root, searcher, index);
     }
 
-    @Override
-    public void accept(Visitor<K, V> visitor) throws Exception {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'accept'");
-    }
+    // Helper methods
 
-    // helper methods
-    private TreeNode<K, V> insertNode(TreeNode<K, V> node, K key, V value) {
-        if (node == null) {
-            System.out.println("Added a node with value " + value + " and key " + key + " size is " + size);
+    private boolean insertNode(TreeNode<K, V> node, K key, V value) {
+        boolean insertionResult = false;
 
-            return new TreeNode<K, V>(key, value);
+        if (node != null) {
+            if (node.value.equals(value)) {
+                node.value = value;
+                node.key = key;
+                return false;
+            }
+
+            int comparatorResult = comparator.compare(key, node.key);
+            if (comparatorResult < 0) {
+                if (node.left == null) {
+                    node.left = new TreeNode<K, V>(key, value);
+                    return true;
+                } else {
+                    return insertNode(node.left, key, value);
+                }
+            } else if (comparatorResult > 0) {
+                if (node.right == null) {
+                    node.right = new TreeNode<K, V>(key, value);
+                    return true;
+                } else {
+                    return insertNode(node.right, key, value);
+                }
+            }
+
         }
-        int comparatorResult = comparator.compare(node.key, key);
-        if (comparatorResult == 0) {
-            node.value = value;
-            node.key = key;
-        } else if (comparatorResult < 0) {
-            node.left = insertNode(node.left, key, value);
-        } else {
-            node.right = insertNode(node.right, key, value);
-        }
-        return node;
+        return insertionResult;
     }
 
-    private V search(TreeNode<K, V> node, K key) {
-
+    private V getHelper(TreeNode<K, V> node, K key) {
         if (node == null) {
             return null;
         }
         int comparatorResult = comparator.compare(key, node.key);
-
         if (comparatorResult < 0) {
-            return search(node.left, key);
+            return getHelper(node.left, key);
         } else if (comparatorResult > 0) {
-            return search(node.right, key);
+            return getHelper(node.right, key);
         } else {
             return node.value;
         }
@@ -183,27 +210,21 @@ public class BinarySearchTreeContainer<K extends Comparable<K>, V> implements TI
         if (node == null) {
             return node;
         }
-
         int comparatorResult = comparator.compare(node.key, key);
-
         if (comparatorResult < 0) {
             node.left = deleteNode(node.left, key);
         } else if (comparatorResult > 0) {
             node.right = deleteNode(node.right, key);
         } else {
-            // the key is found here
-            if (root.left.equals(null)) {
-                return root.right;
-            } else if (root.right.equals(null)) {
-                return root.left;
+            if (node.left == null) {
+                return node.right;
+            } else if (node.right == null) {
+                return node.left;
             }
-            // here we can presume that the node has two children so lets find the inorder
-            // predecessor(node with largest value in the left subtree)
             TreeNode<K, V> maxValueTreeNode = findMaxNode(node.left);
             node.key = maxValueTreeNode.key;
             node.value = maxValueTreeNode.value;
             node.left = deleteNode(node.left, node.key);
-
         }
         return node;
     }
@@ -216,17 +237,13 @@ public class BinarySearchTreeContainer<K extends Comparable<K>, V> implements TI
     }
 
     private V findNode(TreeNode<K, V> node, Predicate<V> explorer) {
-        V leftSearch = findNode(node.left, explorer);
-        V rightSearch = findNode(node.right, explorer);
+        if (node != null) {
+            findNode(node.left, explorer);
+            findNode(node.right, explorer);
+            if (explorer.test(node.value)) {
+                return node.value;
+            }
 
-        if (explorer.test(node.value)) {
-            return node.value;
-        }
-        if (leftSearch != null) {
-            return leftSearch;
-        }
-        if (rightSearch != null) {
-            return rightSearch;
         }
         return null;
     }
@@ -239,32 +256,11 @@ public class BinarySearchTreeContainer<K extends Comparable<K>, V> implements TI
         }
     }
 
-    private int indexOfHelper(TreeNode<K, V> node, K key, AtomicInteger index) {
-        if (node == null) {
-            return -1;
-        }
-
-        index.incrementAndGet();
-
-        int comparatorResult = comparator.compare(key, node.key);
-
-        if (comparatorResult < 0) {
-            return indexOfHelper(node.left, key, index);
-        } else if (comparatorResult > 0) {
-            return indexOfHelper(node.right, key, index);
-        } else {
-            if (key.equals(node.key)) {
-                return index.get() - 1;
-            } else {
-                return -1;
-            }
-        }
-    }
     private Pair<K, V> getIndexHelper(TreeNode<K, V> node, AtomicInteger currentIndex, int index) {
         if (node != null) {
             Pair<K, V> leftResult = getIndexHelper(node.left, currentIndex, index);
             if (leftResult != null) {
-                return leftResult;  // Propagate the result from the left subtree.
+                return leftResult;
             }
             if (currentIndex.get() == index) {
                 return new Pair<>(node.key, node.value);
@@ -272,24 +268,38 @@ public class BinarySearchTreeContainer<K extends Comparable<K>, V> implements TI
             currentIndex.incrementAndGet();
             Pair<K, V> rightResult = getIndexHelper(node.right, currentIndex, index);
             if (rightResult != null) {
-                return rightResult;  // Propagate the result from the right subtree.
+                return rightResult;
             }
         }
-        throw new IndexOutOfBoundsException("The index is out of bounds");
+        return null;
     }
 
-    private void findIndexHelper(TreeNode<K, V> node, Predicate<V> tester, AtomicInteger currentIndex,
-            AtomicInteger toBeFound) {
-        if (node == null || toBeFound.get() != -1) {
-            return;
-        }
-        findIndexHelper(node.left, tester, currentIndex, toBeFound);
+    private int findIndexHelper(TreeNode<K, V> node, Predicate<V> tester, AtomicInteger currentIndex) {
+        if (node != null) {
 
-        if (tester.test(node.value)) {
-            toBeFound.set(currentIndex.get());
-            return;
+            int left = findIndexHelper(node.left, tester, currentIndex);
+            if (left != -1) {
+                return left;
+            }
+
+            if (tester.test(node.value)) {
+                return currentIndex.get();
+            }
+            currentIndex.incrementAndGet();
+
+            int right = findIndexHelper(node.right, tester, currentIndex);
+            if (right != -1) {
+                return right;
+            }
+
         }
-        currentIndex.incrementAndGet();
-        findIndexHelper(node.right, tester, currentIndex, toBeFound);
+
+        return -1;
+    }
+
+    @Override
+    public void accept(Visitor<K, V> visitor) throws Exception {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'accept'");
     }
 }
