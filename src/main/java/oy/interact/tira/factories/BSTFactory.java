@@ -6,6 +6,7 @@ import java.util.Comparator;
 import oy.interact.tira.util.TIRAKeyedOrderedContainer;
 import oy.interact.tira.util.Visitor;
 import oy.interact.tira.NotYetImplementedException;
+import oy.interact.tira.student.BinarySearchTreeContainer;
 
 public class BSTFactory {
 	private BSTFactory() {
@@ -13,7 +14,7 @@ public class BSTFactory {
 	}
 
 	public static <K extends Comparable<K>, V> TIRAKeyedOrderedContainer<K,V> createBST(Comparator<K> comparator) {
-		throw new NotYetImplementedException("Task 07-TASK about BST not yet implemented");
+		return new BinarySearchTreeContainer<K,V>(comparator);
 	}
 
 	// You may create the functionality that analyses a BST using the Visitor pattern
