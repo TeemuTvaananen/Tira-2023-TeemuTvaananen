@@ -188,19 +188,21 @@ public class Coder implements Comparable<Coder> {
 	 * Note: this class has a natural ordering that is inconsistent with equals.
 	 * 
 	 * Equals compares the equality of the Coder.id, as compareTo compares
-	 * the Coder full names. This is to make sure we can hold several coders 
+	 * the Coder full names. This is to make sure we can hold several coders
 	 * in containers having the same name (as happens in real world), but still
 	 * can identify them as different Coders using the Coder.id.
 	 * 
-	 * TODO: Implement compareTo so that the order of coders ordered by using this methos
-	 * will be natural order. Meaning, alphabetical order A...Ö (by lastname-firstname order).
+	 * TODO: Implement compareTo so that the order of coders ordered by using this
+	 * methos
+	 * will be natural order. Meaning, alphabetical order A...Ö (by
+	 * lastname-firstname order).
 	 */
 	@Override
 	public int compareTo(Coder another) {
-			return this.getFullName().compareTo(another.getFullName());	
-			//tässä tapahtuu vertailu kahden Coder-nimisen olion välillä, 
-			//vertailun perusteena on koko nimi järjestyksessä sukunimi-etunimi
-			}
+		return this.getFullName().compareTo(another.getFullName());
+		// tässä tapahtuu vertailu kahden Coder-nimisen olion välillä,
+		// vertailun perusteena on koko nimi järjestyksessä sukunimi-etunimi
+	}
 
 	/**
 	 * You need to implement this in Exercise 8 on hash tables. No need to implement
@@ -215,7 +217,14 @@ public class Coder implements Comparable<Coder> {
 	 */
 	@Override
 	public int hashCode() {
-		return 0;
+		if (id == null) {
+			return 0;
+		}
+		int hash = 31;
+		for (int index = 0; index < id.length(); index++) {
+			hash = hash * 31 + id.charAt(index);
+		}
+		return hash;
 	}
 
 }

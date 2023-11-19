@@ -10,13 +10,13 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 public class BinarySearchTreeContainer<K extends Comparable<K>, V> implements TIRAKeyedOrderedContainer<K, V> {
 
-    private class TreeNode<K, V> {
-        private K key;
-        private V value;
-        private TreeNode<K, V> left;
-        private TreeNode<K, V> right;
+    private class TreeNode<P, Q> {
+        private P key;
+        private Q value;
+        private TreeNode<P, Q> left;
+        private TreeNode<P, Q> right;
 
-        public TreeNode(K key, V value) {
+        public TreeNode(P key, Q value) {
             this.key = key;
             this.value = value;
             this.left = null;
@@ -135,7 +135,7 @@ public class BinarySearchTreeContainer<K extends Comparable<K>, V> implements TI
             } else {
                 parent = nodes.pop();
                 current = parent.right;
-                if(parent.key.equals(itemKey)){
+                if (parent.key.equals(itemKey)) {
                     return index.get();
                 }
                 index.incrementAndGet();
@@ -186,6 +186,14 @@ public class BinarySearchTreeContainer<K extends Comparable<K>, V> implements TI
                 } else {
                     return insertNode(node.right, key, value);
                 }
+
+            } else {
+                if (node.left == null) {
+                    node.left = new TreeNode<K, V>(key, value);
+                    return true;
+                } else {
+                    return insertNode(node.left, key, value);
+                }
             }
 
         }
@@ -210,7 +218,9 @@ public class BinarySearchTreeContainer<K extends Comparable<K>, V> implements TI
         if (node == null) {
             return node;
         }
+
         int comparatorResult = comparator.compare(node.key, key);
+
         if (comparatorResult < 0) {
             node.left = deleteNode(node.left, key);
         } else if (comparatorResult > 0) {
@@ -221,31 +231,43 @@ public class BinarySearchTreeContainer<K extends Comparable<K>, V> implements TI
             } else if (node.right == null) {
                 return node.left;
             }
-            TreeNode<K, V> maxValueTreeNode = findMaxNode(node.left);
-            node.key = maxValueTreeNode.key;
-            node.value = maxValueTreeNode.value;
-            node.left = deleteNode(node.left, node.key);
+
+            TreeNode<K, V> minValueTreeNode = findMinNode(node.right);
+            node.key = minValueTreeNode.key;
+            node.value = minValueTreeNode.value;
+
+            node.right = deleteNode(node.right, minValueTreeNode.key);
         }
+
         return node;
     }
 
-    private TreeNode<K, V> findMaxNode(TreeNode<K, V> node) {
-        while (node.right != null) {
-            node = node.right;
+    private TreeNode<K, V> findMinNode(TreeNode<K, V> node) {
+        while (node.left != null) {
+            node = node.left;
         }
         return node;
     }
 
     private V findNode(TreeNode<K, V> node, Predicate<V> explorer) {
+        V result = null;
+
         if (node != null) {
-            findNode(node.left, explorer);
-            findNode(node.right, explorer);
-            if (explorer.test(node.value)) {
-                return node.value;
+            // Traverse left subtree
+            result = findNode(node.left, explorer);
+
+            // Check the current node
+            if (result == null && explorer.test(node.value)) {
+                result = node.value;
             }
 
+            // Traverse right subtree
+            if (result == null) {
+                result = findNode(node.right, explorer);
+            }
         }
-        return null;
+
+        return result;
     }
 
     private void toArrayHelp(TreeNode<K, V> node, Pair<K, V>[] array, AtomicInteger index) {
@@ -266,32 +288,22 @@ public class BinarySearchTreeContainer<K extends Comparable<K>, V> implements TI
                 return new Pair<>(node.key, node.value);
             }
             currentIndex.incrementAndGet();
-            Pair<K, V> rightResult = getIndexHelper(node.right, currentIndex, index);
-            if (rightResult != null) {
-                return rightResult;
-            }
+            return getIndexHelper(node.right, currentIndex, index);
         }
         return null;
     }
 
     private int findIndexHelper(TreeNode<K, V> node, Predicate<V> tester, AtomicInteger currentIndex) {
         if (node != null) {
-
             int left = findIndexHelper(node.left, tester, currentIndex);
             if (left != -1) {
                 return left;
             }
-
-            if (tester.test(node.value)) {
-                return currentIndex.get();
-            }
             currentIndex.incrementAndGet();
-
-            int right = findIndexHelper(node.right, tester, currentIndex);
-            if (right != -1) {
-                return right;
+            if (tester.test(node.value)) {
+                return currentIndex.get() - 1;
             }
-
+            return findIndexHelper(node.right, tester, currentIndex);
         }
 
         return -1;
