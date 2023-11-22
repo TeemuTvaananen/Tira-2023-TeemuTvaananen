@@ -218,9 +218,9 @@ public class BinarySearchTreeContainer<K extends Comparable<K>, V> implements TI
         if (node == null) {
             return node;
         }
-
+    
         int comparatorResult = comparator.compare(node.key, key);
-
+    
         if (comparatorResult < 0) {
             node.left = deleteNode(node.left, key);
         } else if (comparatorResult > 0) {
@@ -231,23 +231,24 @@ public class BinarySearchTreeContainer<K extends Comparable<K>, V> implements TI
             } else if (node.right == null) {
                 return node.left;
             }
-
             TreeNode<K, V> minValueTreeNode = findMinNode(node.right);
+    
             node.key = minValueTreeNode.key;
             node.value = minValueTreeNode.value;
-
+    
             node.right = deleteNode(node.right, minValueTreeNode.key);
         }
-
+    
         return node;
     }
-
+    
     private TreeNode<K, V> findMinNode(TreeNode<K, V> node) {
         while (node.left != null) {
             node = node.left;
         }
         return node;
     }
+    
 
     private V findNode(TreeNode<K, V> node, Predicate<V> explorer) {
         V result = null;
