@@ -1,24 +1,23 @@
 package oy.interact.tira.student;
 
+import java.io.EOFException;
+import java.util.function.Predicate;
 import oy.interact.tira.model.Coder;
 import oy.interact.tira.util.Pair;
 import oy.interact.tira.util.TIRAKeyedContainer;
-import java.util.function.Predicate;
 
-public class HashTableContainer<K extends Comparable<K>, V> implements TIRAKeyedContainer<K, V> {
+public class HashTableContainer<K extends Comparable<K>, V>
+        implements TIRAKeyedContainer<K, V> {
 
     private int size;
     private static final double REALLOCATION_THRESHOLD = 0.65;
     private static int DEFAULT_ARRAY_CAPACITY = 20;
     private Pair<K, V>[] table;
 
-    public HashTableContainer() {
-        this(DEFAULT_ARRAY_CAPACITY);
-    }
 
     @SuppressWarnings("unchecked")
-    public HashTableContainer(int capacity) {
-        this.table = new Pair[capacity];
+    public HashTableContainer() {
+        this.table = (Pair<K, V>[]) new Pair[DEFAULT_ARRAY_CAPACITY];
         this.size = 0;
     }
 
@@ -55,11 +54,10 @@ public class HashTableContainer<K extends Comparable<K>, V> implements TIRAKeyed
                 hashModifier++;
             }
         } while (!added);
-
     }
 
     private int indexFor(K key, int hashModifier) {
-        return Math.abs(hash(key) + hashModifier) % capacity();
+        return (hash(key) + hashModifier) % capacity();
     }
 
     @Override
@@ -77,7 +75,6 @@ public class HashTableContainer<K extends Comparable<K>, V> implements TIRAKeyed
                 if (table[index].getKey().equals(key)) {
                     result = table[index].getValue();
                     keyfound = true;
-                    System.out.println("Found something with " + table[index].getKey() + " " + table[index].getValue());
                 } else {
                     hashModifier++;
                 }
@@ -85,26 +82,34 @@ public class HashTableContainer<K extends Comparable<K>, V> implements TIRAKeyed
                 keyfound = true;
             }
         } while (!keyfound);
-    
+
         return result;
     }
-    
 
     @Override
     public V remove(K key) throws IllegalArgumentException {
         if (key == null) {
             throw new IllegalArgumentException("The key cannot be null");
         }
-        int index = Math.abs(hash(key));
 
-        while (table[index] != null && !table[index].isRemoved()) {
-            if (table[index].getKey().equals(key)) {
+        int index = 0;
+        boolean removed = false;
+        int hashModifier = 0;
+
+        do {
+            index = indexFor(key, hashModifier);
+            if (table[index] == null) {
                 table[index].setRemoved();
+                removed = true;
                 size--;
-                return table[index].getValue();
+            } else if (table[index].getKey().equals(key)) {
+                table[index].setRemoved();
+                removed = true;
+            } else {
+                hashModifier++;
             }
-            index = (index + 1) % table.length;
-        }
+        } while (!removed);
+
         return null;
     }
 
@@ -120,13 +125,7 @@ public class HashTableContainer<K extends Comparable<K>, V> implements TIRAKeyed
 
     @Override
     public int size() {
-        int count = 0;
-    for (Pair<K, V> pair : table) {
-        if (pair != null && !pair.isRemoved()) {
-            count++;
-        }
-    }
-    return count;
+        return size;
     }
 
     @Override
@@ -140,21 +139,21 @@ public class HashTableContainer<K extends Comparable<K>, V> implements TIRAKeyed
         if (newCapacity <= capacity()) {
             throw new IllegalArgumentException("New capacity must be greater than the current capacity");
         }
-    
+
+        if(newCapacity == Integer.MAX_VALUE){
+            throw new OutOfMemoryError("Maxmimum container memory exceeded!");
+        }
+
         Pair<K, V>[] newArray = table;
-    
-        table = new Pair[newCapacity];
-    
+        table = (Pair<K, V>[]) new Pair[newCapacity];
+        size = 0;
         for (int i = 0; i < newArray.length; i++) {
             if (newArray[i] != null && !newArray[i].isRemoved()) {
                 add(newArray[i].getKey(), newArray[i].getValue());
             }
         }
-
         size = size();
-
     }
-    
 
     @SuppressWarnings("unchecked")
     @Override
@@ -167,10 +166,13 @@ public class HashTableContainer<K extends Comparable<K>, V> implements TIRAKeyed
     @Override
     public Pair<K, V>[] toArray() throws Exception {
         Pair<K, V>[] copy = (Pair<K, V>[]) new Pair[size];
-        int index = 0;
-        for (Pair<K, V> current : table) {
-            if (current != null && !current.isRemoved()) {
-                copy[index++] = current;
+        if (copy.length == Integer.MAX_VALUE) {
+            throw new Exception("Maximum memory exceeded");
+        }
+        int copyIndex = 0;
+        for (Pair<K, V> pair: table) {
+            if (pair != null && !pair.isRemoved()) {
+                copy[copyIndex++] = pair;
             }
         }
         return copy;

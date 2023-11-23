@@ -224,7 +224,7 @@ public class Coder implements Comparable<Coder> {
 		for (int index = 0; index < id.length(); index++) {
 			hash = hash * 31 + id.charAt(index);
 		}
-		return hash;
+		return Math.abs(hash);
 	}
 
 }
