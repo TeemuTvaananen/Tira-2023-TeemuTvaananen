@@ -2,7 +2,6 @@ package oy.interact.tira.task_08_hashtable;
 
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.fail;
 
 import java.io.BufferedReader;
@@ -118,7 +117,7 @@ public class SimpleKeyedTablePerformanceTests {
 					}
 					end = System.currentTimeMillis();
 					long findDuration = end - start;
-					System.out.format(" Step 6/6: Searching SimpleKeyedContainer took %d ms%n", duration);
+					System.out.format(" Step 6/6: Searching SimpleKeyedContainer took %d ms%n", findDuration);
 
 					int codersLength = coders.length;
 					coders = null;

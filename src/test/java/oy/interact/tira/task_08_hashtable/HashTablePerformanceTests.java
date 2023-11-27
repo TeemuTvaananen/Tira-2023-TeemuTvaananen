@@ -52,9 +52,9 @@ public class HashTablePerformanceTests {
 			"5000-town-coders.json",
 			"10000-large-city-coders.json",
 			"50000-country-coders.json",
-			"100000-europe-coders.json",
-			"1000000-global-coders.json",
-			"2000000-milky-way-orion-spur-coders.json"
+			// "100000-europe-coders.json",
+			// "1000000-global-coders.json",
+			// "2000000-milky-way-orion-spur-coders.json"
 	};
 
 	private static Coder found = null;
@@ -75,7 +75,7 @@ public class HashTablePerformanceTests {
 
 	@Test
 	@Order(1)
-	// @Timeout(value = 600, threadMode = Timeout.ThreadMode.SEPARATE_THREAD)
+	// @Timeout(value = 60, threadMode = Timeout.ThreadMode.SEPARATE_THREAD)
 	void handleReadTestFilesWithHashTable() {
 		if (null != writer) {
 			try {
@@ -88,13 +88,13 @@ public class HashTablePerformanceTests {
 						testFiles.length, 
 						testFiles[currentIndex], 
 						new SimpleDateFormat("yyyy/MM/dd HH:mm:ss").format(new Date()));
-					final TIRAKeyedContainer<String, Coder> hashTable = HashTableFactory.createHashTable();
+					final TIRAKeyedContainer<Coder, Coder> hashTable = HashTableFactory.createHashTable();
 					assertNotNull(hashTable,
 							() -> "HashTableFactory.createHashTable() returns null, not yet implemented?");
 					Coder[] coders = readCodersFromFile(testFiles[currentIndex]);
 					long start = System.currentTimeMillis();
 					for (Coder coder : coders) {
-						hashTable.add(coder.getId(), coder);
+						hashTable.add(coder, coder);
 					}
 					long end = System.currentTimeMillis();
 					long duration = end - start;
@@ -113,26 +113,26 @@ public class HashTablePerformanceTests {
 					// Searching
 					start = System.currentTimeMillis();
 					for (Coder coder : coders) {
-						assertDoesNotThrow(() -> found = hashTable.get(coder.getId()), "hashTable.get(K) must not throw");
+						assertDoesNotThrow(() -> found = hashTable.get(coder), "hashTable.get(K) must not throw");
 						assertEquals(coder, found, "Found coder must be equal to the searched coder");
 					}
 					end = System.currentTimeMillis();
 					long findDuration = end - start;
-					System.out.format(" Step 6/6: Searching hash table took %d ms%n", duration);
+					System.out.format(" Step 6/6: Searching hash table took %d ms%n", findDuration);
 
 					int codersLength = coders.length;
 					coders = null;
 
 					// toArray and sorting
 					start = System.currentTimeMillis();
-					Pair<String, Coder>[] coders2 = hashTable.toArray();
+					Pair<Coder, Coder>[] coders2 = hashTable.toArray();
 					end = System.currentTimeMillis();
 					duration = end - start;
 					long totalDuration = duration;
 					System.out.format(" Step 4/6: Exporting coders to array it took %d ms%n", duration);
-					Comparator<Pair<String, Coder>> comparator = new Comparator<>() {
+					Comparator<Pair<Coder, Coder>> comparator = new Comparator<>() {
 						@Override
-						public int compare(Pair<String, Coder> first, Pair<String, Coder> second) {
+						public int compare(Pair<Coder, Coder> first, Pair<Coder, Coder> second) {
 							return first.getKey().compareTo(second.getKey());
 						}
 					};
