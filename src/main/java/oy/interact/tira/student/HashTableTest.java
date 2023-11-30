@@ -13,14 +13,14 @@ public class HashTableTest {
         System.out.println(hashTable.get("Two"));
         System.out.println(hashTable.get("Three"));
        
-        System.out.println("Removing the elements");
+        System.out.println("Removing the elements\n");
 
-        System.out.println(hashTable.remove("One"));
-        System.out.println(hashTable.remove("Two"));
-        System.out.println(hashTable.remove("Three"));
+        System.out.println("Removing the first element " + hashTable.remove("One"));
+        System.out.println("Size should be 2 and it is " + hashTable.size());
+        System.out.println("Removing the second element " + hashTable.remove("Two"));
+        System.out.println("Size should be 1 and it is " + hashTable.size());
+        System.out.println("Removing the Third element " + hashTable.remove("Three"));
+        System.out.println("Checking that size is 0 and it is " + hashTable.size());
 
-        System.out.println("Checking that size is 0");
-
-        System.out.println(hashTable.size());
     }
 }

@@ -52,9 +52,9 @@ public class HashTablePerformanceTests {
 			"5000-town-coders.json",
 			"10000-large-city-coders.json",
 			"50000-country-coders.json",
-			// "100000-europe-coders.json",
-			// "1000000-global-coders.json",
-			// "2000000-milky-way-orion-spur-coders.json"
+			"100000-europe-coders.json",
+			"1000000-global-coders.json",
+			"2000000-milky-way-orion-spur-coders.json"
 	};
 
 	private static Coder found = null;
