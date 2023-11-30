@@ -62,17 +62,8 @@ public class BinarySearchTreeContainer<K extends Comparable<K>, V> implements TI
     }
 
     @Override
-    public V remove(K key) throws IllegalArgumentException {
-        if (key == null) {
-            throw new IllegalArgumentException("The key is null");
-        }
-        TreeNode<K, V> newRoot = deleteNode(root, key);
-        if (newRoot != null) {
-            size--;
-            root = newRoot;
-            return newRoot.value;
-        }
-        return null;
+    public V remove(K key) throws IllegalArgumentException {           
+        return null; 
     }
 
     @Override
@@ -212,44 +203,8 @@ public class BinarySearchTreeContainer<K extends Comparable<K>, V> implements TI
         } else {
             return node.value;
         }
-    }
-
-    private TreeNode<K, V> deleteNode(TreeNode<K, V> node, K key) {
-        if (node == null) {
-            return node;
-        }
+    }  
     
-        int comparatorResult = comparator.compare(node.key, key);
-    
-        if (comparatorResult < 0) {
-            node.left = deleteNode(node.left, key);
-        } else if (comparatorResult > 0) {
-            node.right = deleteNode(node.right, key);
-        } else {
-            if (node.left == null) {
-                return node.right;
-            } else if (node.right == null) {
-                return node.left;
-            }
-            TreeNode<K, V> minValueTreeNode = findMinNode(node.right);
-    
-            node.key = minValueTreeNode.key;
-            node.value = minValueTreeNode.value;
-    
-            node.right = deleteNode(node.right, minValueTreeNode.key);
-        }
-    
-        return node;
-    }
-    
-    private TreeNode<K, V> findMinNode(TreeNode<K, V> node) {
-        while (node.left != null) {
-            node = node.left;
-        }
-        return node;
-    }
-    
-
     private V findNode(TreeNode<K, V> node, Predicate<V> explorer) {
         V result = null;
 

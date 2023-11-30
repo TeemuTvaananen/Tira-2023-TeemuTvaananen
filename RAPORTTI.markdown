@@ -224,6 +224,54 @@ Taulukon tuloksista ja graafeista voidaan havaita seuraavia asioita:
 -Kaiken kaikkiaan opin tehtävän tekemisessä paljon uutta nopeista lajittelualgoritmeista ja tehtävä oli erittäin mielenkiintoinen ja opettavainen
 ## 07-TASK
 
+** DISCLAIMER TOTEUTIN TEHTÄVÄN JAKAEN IDEOITA JA YHDESSÄ TUUMIEN OPISKELIJA ESKO HAUTALAN KANSSA ** 
+
+
+Tehtävä oli erittäin haastava ja aluksi tarvittiin perinpohjaista tutustumista tietorakenteen toimintaan ja ylipäätään logiikkaan jolla binäärinen hakupuu toimii. Tässä tulivat vastaan jo ensimmäiset haasteet, sillä oli erittäin vaikeaa saada omaan päähäni ne toimintaperiaatteet, mutta lopulta luentovideoiden avulla sain lopulta tulkittua hakupuun logiikkaa ja pääsin tekemään toteutusta. Valitsin algoritmien toteutustavaksi rekursiivisen inorder läpikäynnin. Silmukoiden käyttöä on tullut muilla kursseilla harjoiteltua hyvin joten halusin hieman haastetta rekursiivisen tavan muodossa. Debuggausvaiheessa näiden korjaaminen oli työlästä, mutta mielestäni sain kaiken vaadittavan lopulta toimimaan oikeellisesti ja suhteellisen tehokkaasti. BST performance test täytyi keskeyttää sillä miljoonalla koodarilla testi hidastui merkittävästi eikä enää edennyt mihinkään. Alla on taulukko muodossa tämän testin tuloksia ja näistä piirrettyjä graafeja.
+
+HAKUPUU TAULUKOT JA ANALYYSI
+![BST_TAULUKKO](image-13.png)
+
+![ADDTIME](image-14.png)
+![SEARCH TIME / N](image-15.png)
+![TOARRAY / N](image-16.png)
+![GET INDEX /N](image-17.png)
+
+Analyysiä taulukon ja käyrien perusteella 
+
+ADD time: Ensimmäisenä huomasin sen, että arvot joissa tarkastellaan lisäämisaikaa yhtä elementtiä kohden  ovat aikalailla samoja koko ajan mikä voisi viitata logaritmiseen aikakompleksisuuteen. Add time arvot ovat suhteellisen kohtuullisia ja kasvavat tasaisesti N:n kasvaessa. 
+TO SORTED ARRAY: Odotin tässä lineaarista aikakompleksisuutta ja mielestäni algoritmi käyttäytyy sen mukaisesti. 
+SEARCH: "Search time" -arvot vaikuttavat kasvavan elementtien määrän kasvaessa. Pitäisi testata laajemmalla aineistolla varmistuakseen aikakompleksisuudesta.
+"Search time/item" -arvot ovat suhteellisen vakaita, mikä viittaa logaritmiseen käyttäytymiseen.
+GET INDEX: Pere elementtiä kohden arvot pysyvät suhteellisen alhaisina. Joissain kohdissa se on suoraan tuhat kertaa alhaisempi kuin getIndex arvo. Esimerkiksi 0.0174 ja vastaava getIndex 174. Isoilla aineistoilla tämä hidastuu merkittävästi vaikuttaen myös käyttöliittymässä.
+
+
+TAULUKKOPOHJAINEN TAULUKOT JA ANALYYSI
+
+![TAULUKKO_TAULUKKO](image-18.png)
+![TO_ARRAY_TAULUKKO](image-19.png)
+![ADDTIME_TAULUKKO](image-20.png)
+![SEARCHTIME_TAULUKKO](image-21.png)
+![GETINDEX TAULUKKO](image-22.png)
+
+Se mikä lukijalle pistää näistä ensimmäisenä silmään räikeytensä vuoksi on getIndex. Todellisuudessa tarkastellessa arvoja huomataan, että se on aikakompleksisuudeltaan O(1) eli operaation suoritusaika on vakio riippumatta aineiston koosta. Binäärisessä hakupuussa tämä arvo kasvoi myös aineiston kasvaessa. 
+
+ADD TIME: Add time kasvaa aineiston kasvaessa ja todennäköisimmin syy johtuu siitä, että taulukkoa joudutaan reallokoimaan paljon. Vertaillessa BST ja taulukkopohjaista toteutusta voidaan huomata, että taulukko voi olla ehkä hieman tehokkaampi pienemmillä dataseteillä, mutta binäärisen hakupuun toteutus pysyy vakaanpana myös suuremmilla dataseteillä.
+
+TOARRAY: Taulukkopohjaisella toteutuksella käyrä ja arvot osoittavat logaritmista käyttäytymistä. Tämä todennäköisesti johtuu nopeasta lajittelualgoritmista. Binäärisen hakupuun etu tässä on se, ettei se vaadi erillistä järjestämistä ja täten saattaa olla hieman nopeampi toteutettuna oikein.
+SEARCH Search-operaation aikakompleksisuus kasvaa suurilla dataseteillä, mikä viittaa siihen, että haku on lineaarista.
+Aikakompleksisuus per elementti on suhteellisen vakaa. BST:llä hakuoperaatio (search) on keskimäärin nopeampi verrattuna lineaariseen haulle taulukkopohjaisessa toteutuksessa. 
+
+GETINDEX:
+Taulukkopohjaisen toteutuksen metodi on huomattavasti nopeampi kuin BST:llä. BST:ssä toteutus vaatii inorder rekursiivisen läpikäynnin ja tämä hidastaa toteutusta suurilla dataseteillä.
+
+Yhteenveto molemmista toteutuksista:
+
+Taulukkopohjainen toteutus voi olla tehokas pienillä dataseteillä ja yksinkertaisissa operaatioissa, mutta sen tehokkuus heikentyy isommilla dataseteillä.
+BST-pohjainen toteutus voi olla tehokkaampi isoimmilla dataseteillä ja tarjoaa nopeamman haun ja lisäyksen keskimäärin.
+
 ## 08-TASK
+Hajautustaulun toteutusta miettiessäni oli alussa samankaltaisia ongelmia kuin BST:n kanssa. Oli vaikeaa saada iskostettua aivoihini kuinka hajautustaulu toimii ja miten erilaisten metodien toteuttamista tulisi miettiä. Kuitenkin katselemalla luentovideoiden tallenteita sain pian hyvän käsityksen hajatustauluun lisäämisestä, tietyn elementin löytämisestä ja poistamisesta. Muita metodeja toteuttaessani sain vielä apua moodlen UKK-tiketit osiosta, jossa esimerkiksi kerrottiin hyvin se, miten tämän Pair-tyyppisen taulukon, jolla toteutukseni toimii, voi lajitella hyödyntäen nopeaa lajittelualgoritmia. 
+
 
 ## 09-TASK
