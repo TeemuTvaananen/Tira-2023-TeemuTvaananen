@@ -271,33 +271,32 @@ Taulukkopohjainen toteutus voi olla tehokas pienillä dataseteillä ja yksinkert
 BST-pohjainen toteutus voi olla tehokkaampi isoimmilla dataseteillä ja tarjoaa nopeamman haun ja lisäyksen keskimäärin.
 
 ## 08-TASK
-Hajautustaulun toteutusta miettiessäni oli alussa samankaltaisia ongelmia kuin BST:n kanssa. Oli vaikeaa saada iskostettua aivoihini kuinka hajautustaulu toimii ja miten erilaisten metodien toteuttamista tulisi miettiä. Kuitenkin katselemalla luentovideoiden tallenteita sain pian hyvän käsityksen hajatustauluun lisäämisestä, tietyn elementin löytämisestä ja poistamisesta. Muita metodeja toteuttaessani sain vielä apua moodlen UKK-tiketit osiosta, jossa esimerkiksi kerrottiin hyvin se, miten tämän Pair-tyyppisen taulukon, jolla toteutukseni toimii, voi lajitella hyödyntäen nopeaa lajittelualgoritmia. 
+** DISCLAIMER TOTEUTIN TEHTÄVÄN JAKAEN IDEOITA JA YHDESSÄ TUUMIEN OPISKELIJA ESKO HAUTALAN KANSSA ** 
 
+Hajautustaulun toteutusta miettiessäni oli alussa samankaltaisia ongelmia kuin BST:n kanssa. Oli vaikeaa saada iskostettua aivoihini kuinka hajautustaulu toimii ja miten erilaisten metodien toteuttamista tulisi miettiä. Kuitenkin katselemalla luentovideoiden tallenteita sain pian hyvän käsityksen hajatustauluun lisäämisestä, tietyn elementin löytämisestä ja poistamisesta. Muita metodeja toteuttaessani sain vielä apua moodlen UKK-tiketit osiosta, jossa esimerkiksi kerrottiin hyvin se, miten tämän Pair-tyyppisen taulukon, jolla toteutukseni toimii, voi lajitella hyödyntäen nopeaa lajittelualgoritmia. Näiden lisäksi sivustolta https://www.freecodecamp.org/news/hash-tables/ sain myös selvyyttä hajautustaulun toimintaan ja siihen miten voisin lähteä tekemään omaa toteutustani siihen. Aluksi oli myös hämmennystä liittyen siihen millä hajautusfunktiolla voin laskea tiivisteen. Kuitenkin tämän kysymyksen vastaus löytyi myös UKK-tiketit osiosta. 
 Alla on tuloksia testeistä ja analyysi niiden pohjalta. 
 
+**************************
 Hashtable performance tests taulukko
-
 
 ![HASHTABLE_TAULUKKO](image-23.png)
 
 Tämän pohjalta piirretyt graafit
 
-
 ![ADD HASHTABLE](image-24.png)
 ![TO ARRAY HASHTABLE](image-25.png)
 ![SEARCH HASH](image-26.png)
-
+*********
 Analyysi:
+
 ADD: Koon kasvaessa tämän operaation kesto kasvaa myös tasaisesti. Isoimmilla aineistoilla ajan kasvaminen johtuu siitä, että indeksiä joudutaan luotaamaan tarkemmin ja mahdollisesti pitempään. Add time/item kuitenkin pysyy suhteellisen vakaana mikä on mielestäni merkki onnistuneesta ja tehokkaasta toteutuksesta. 
 
-TOARRAY: Tietoaineistojen kasvaessa tämä suoritusaika kasvaa myös merkittävästi. Johtuu siitä, että isojen aineistojen läpikäymiseen menee aikaa enemmän
+TOARRAY: Tietoaineistojen kasvaessa tämä suoritusaika kasvaa myös merkittävästi. Johtuu siitä, että isojen aineistojen läpikäymiseen menee aikaa enemmän ja lajittelussa kestää tällöin myös enemmän. Tämä operaatio noudattaa lineaarista aikakompleksisuutta.
 
-Search: Search operaatio vaikuttaa myös tulosten perusteella tehokkaalta. Kahdella miljoonallakin alkiolla operaatioon menee alle sekunti. Search time/ item pysyy myös vakaana mikä viittaa tehokkaaseen toteutukseen.  
+Search: Search operaatio vaikuttaa myös tulosten perusteella tehokkaalta vaikkakin se kasvaa jonkin verran odotetulla tavalla tietoaineiston kasvaessa. Kahdella miljoonallakin alkiolla operaatioon menee alle sekunti. Search time/ item pysyy myös vakaana mikä viittaa tehokkaaseen toteutukseen. "Search time/item"-kohta pysyy myös  suhteellisen vakaana, mikä viittaa siihen, että hakuoperaation aikakompleksisuus on suhteellisen pieni ja ei voimakkaasti riipu datasetin koosta.
 
-
-
+**********************************************
 SimpleKeyedContainer performance tests taulukko
-
 
 ![SKeyedContainer_Taulukko](image-27.png)
 
@@ -308,18 +307,15 @@ Graafit
 ![Search KeyedContainer](image-30.png)
 
 Analyysi:
-ADD: On erittäin tehokkaasti toteutettu tämänn testiaineiston perusteella. Vaikka käyrä näyttää villiltä niin tarkastellessa aikoja voi huomata, että algoritmi on erittäin tehokas ja toimii melkein samalla nopeudella koko ajan.
+ADD: On erittäin tehokkaasti toteutettu tämänn testiaineiston perusteella. Vaikka käyrä näyttää villiltä niin tarkastellessa aikoja voi huomata, että algoritmi on erittäin tehokas ja toimii melkein samalla nopeudella koko ajan. Pääsin mielestäni tällä kurssin vaatimaan aikakompleksisuuteen ja metodi käyttäytyy odotetulla tavalla. 
 
-TOARRAY AND SORT: Lajittelu toimii erittäin nopeasti myös ja vaikuttaisi seuraavan logaritmista 
+TOARRAY AND SORT: Lajittelu toimii erittäin nopeasti myös ja mielestäni täyttää nopean lajittelualgoritmin aikakompleksisuusvaatimuksen O(N logN). 
 
 Search: Search operaatiossa kestää isoilla tietoaineistoilla todella kauan ja se näyttää seuraavan melkeinpä eksponentiaalista kasvua tulosten ja käyrän perusteella. 
 
-Vertailessa toteutuksia Binäärihakupuu (BST) on vahva valinta, kun tarpeena on hoitaa järjestystä tehokkaasti ja toteuttaa esimerkiksi nopeita hakuoperaatioita edellyttäen, että puu, jota tarkastellaan on tasapainoinen ja oikein täytetty.
-
-Hajautustaulu on tehokas erityisesti lisäys- ja hakuoperaatioissa, kun tarvitaan nopeaa pääsyä tietoihin ja etenkin kun tilankäyttö on kriittinen tekijä. Hajautustaulu säilyttää myös tasapainoisen toiminnan kuten testien perusteella voidaan todeta. 
+Vertailessa toteutuksia Binäärihakupuu (BST) on vahva valinta, kun tarpeena on hoitaa järjestystä tehokkaasti ja toteuttaa esimerkiksi nopeita hakuoperaatioita edellyttäen, että puu, jota tarkastellaan on tasapainoinen ja oikein täytetty. Hajautustaulu on puolestaan mielestäni tehokas valinta, kun tarvitaan nopeaa pääsyä tietoihin ja etenkin kun tilankäyttö on kriittinen tekijä ja halutaan suorittaa tehokkaat lisäys ja hakuoperaatiot. Hajautustaulu säilyttää myös tasapainoisen toiminnan kuten testien perusteella voidaan todeta. 
 
 Tarkempia tuloksia varten tulisi toki toteuttaa lisää testejä erilaisilla aineistoilla, mutta yleisesti ottaen tehtävässä toteutettu hajautustaulu vastaa mielestäni hyvin toteutuksen odotuksia ja sain sen toteutettua oikeellisesti. Toteutin valinnaisena tehtävänä myös hajautustaulusta poistamisen ja tämän testaamista varten tein myös luokan. HashTableTest.java. 
-
 
 Toteutuksen lopuksi testasin hajautustaulun toimintaa käytännössä Tira Codersissa. Tarkastelin esimerkiksi koko kurssin käyttämällä repositiorylla CountCodeWord:ia käyttäen  ja tulokset olivat itselläni seuraavat ensimmäisten 25 sanan kohdalla. 
 
