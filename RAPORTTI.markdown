@@ -315,11 +315,11 @@ Search: Search operaatiossa kestää isoilla tietoaineistoilla todella kauan ja 
 
 Vertailessa toteutuksia Binäärihakupuu (BST) on vahva valinta, kun tarpeena on hoitaa järjestystä tehokkaasti ja toteuttaa esimerkiksi nopeita hakuoperaatioita edellyttäen, että puu, jota tarkastellaan on tasapainoinen ja oikein täytetty. Hajautustaulu on puolestaan mielestäni tehokas valinta, kun tarvitaan nopeaa pääsyä tietoihin ja etenkin kun tilankäyttö on kriittinen tekijä ja halutaan suorittaa tehokkaat lisäys ja hakuoperaatiot. Hajautustaulu säilyttää myös tasapainoisen toiminnan kuten testien perusteella voidaan todeta. 
 
-Tarkempia tuloksia varten tulisi toki toteuttaa lisää testejä erilaisilla aineistoilla, mutta yleisesti ottaen tehtävässä toteutettu hajautustaulu vastaa mielestäni hyvin toteutuksen odotuksia ja sain sen toteutettua oikeellisesti. Toteutin valinnaisena tehtävänä myös hajautustaulusta poistamisen ja tämän testaamista varten tein myös luokan. HashTableTest.java. 
-
-Toteutuksen lopuksi testasin hajautustaulun toimintaa käytännössä Tira Codersissa. Tarkastelin esimerkiksi koko kurssin käyttämällä repositiorylla CountCodeWord:ia käyttäen  ja tulokset olivat itselläni seuraavat ensimmäisten 25 sanan kohdalla. 
+Tarkempia tuloksia varten tulisi toki toteuttaa lisää testejä erilaisilla aineistoilla, mutta yleisesti ottaen tehtävässä toteutettu hajautustaulu vastaa mielestäni hyvin toteutuksen odotuksia ja sain sen toteutettua oikeellisesti. Toteutin valinnaisena tehtävänä myös hajautustaulusta poistamisen ja tämän testaamista varten tein myös luokan. HashTableTest.java.  
 
 Kaikenkaikkiaan tehtävä oli haastava, mutta hyvän luentomateriaalin ja erinomaisten demovideoiden ansiosta se onnistui mielestäni vaatimukset täyttävällä tavalla ja tehokkaasti.
+
+Toteutuksen lopuksi testasin hajautustaulun toimintaa käytännössä Tira Codersissa. Tarkastelin esimerkiksi koko kurssin käyttämällä repositiorylla CountCodeWord:ia käyttäen  ja tulokset olivat itselläni seuraavat ensimmäisten 25 sanan kohdalla.
 
 ![TIRAREPOTULOKSET](image-31.png) 
 
