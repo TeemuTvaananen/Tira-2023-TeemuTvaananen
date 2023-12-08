@@ -4,6 +4,7 @@ import java.util.Map;
 import java.util.Queue;
 import java.util.Set;
 
+import oy.interact.tira.student.StackImplementation;
 import oy.interact.tira.student.graph.Edge.EdgeType;
 
 import java.io.IOException;
@@ -149,7 +150,7 @@ public class Graph<T> {
     *         element.
     */
    public Vertex<T> getVertexFor(T element) {
-       for(Vertex<T> vertex: edgeList.keySet()){
+      for (Vertex<T> vertex : edgeList.keySet()) {
          if (vertex.getElement().equals(element)) {
             return vertex;
          }
@@ -167,10 +168,37 @@ public class Graph<T> {
     *         they were found, or an empty list.
     */
    public List<Vertex<T>> breadthFirstSearch(Vertex<T> from, Vertex<T> target) {
-    List<Vertex<T>> visited = new ArrayList<>();
+      List<Vertex<T>> visited = new ArrayList<>();
+      Queue<Vertex<T>> queue = new LinkedList<>();
+      Set<Vertex<T>> found = new HashSet<>();
 
+      if (from == null) {
+         throw new IllegalArgumentException("The starting vertex is null!");
+      }
 
-    return visited;
+      queue.add(from);
+      visited.add(from);
+      found.add(from);
+
+      while (!queue.isEmpty()) {
+         Vertex<T> current = queue.poll();
+
+         if (target != null && current.equals(target)) {
+            return visited;
+         }
+
+         for (Edge<T> edge : edgeList.get(current)) {
+            Vertex<T> neighbor = edge.getDestination();
+            if (!found.contains(neighbor)) {
+               queue.add(neighbor);
+               visited.add(neighbor);
+               found.add(neighbor);
+            }
+         }
+
+      }
+
+      return visited;
    }
 
    /**
@@ -186,7 +214,34 @@ public class Graph<T> {
     */
    public List<Vertex<T>> depthFirstSearch(Vertex<T> from, Vertex<T> target) {
       List<Vertex<T>> visited = new ArrayList<>();
-      
+      StackImplementation<Vertex<T>> stack = new StackImplementation<>();
+      Set<Vertex<T>> found = new HashSet<>();
+
+      if (from == null) {
+         throw new IllegalArgumentException("The starting vertex is null");
+      }
+
+      stack.push(from);
+      visited.add(from);
+      found.add(from);
+
+      while (!stack.isEmpty()) {
+         Vertex<T> current = stack.pop();
+
+         if (target != null && current.equals(target)) {
+            return visited;
+         }
+
+         for (Edge<T> edge : edgeList.get(current)) {
+            Vertex<T> destination = edge.getDestination();
+            if (!found.contains(destination)) {
+               stack.push(destination);
+               visited.add(destination);
+               found.add(destination);
+            }
+         }
+
+      }
       return visited;
    }
 
