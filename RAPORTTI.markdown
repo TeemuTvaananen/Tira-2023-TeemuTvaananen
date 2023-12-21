@@ -324,3 +324,58 @@ Toteutuksen lopuksi testasin hajautustaulun toimintaa käytännössä Tira Coder
 ![TIRAREPOTULOKSET](image-31.png) 
 
 ## 09-TASK
+Tehtävän tekeminen oli mielestäni kohtuullisen vaikeaa ja aluksi kesti kauan aikaa tajuta miten verkkotietorakenne ylipäätään toimii ja minkälaisia hakuoperaaioita voitaisiin toteuttaa verkon sisällä. Opin tehtävän tekemisen aikana monipuolisesti käyttämään javan Map rajapinnan toteuttamia tietorakenteita ja erityisesti vielä hajautustaulun logiikkaa sekä erilaisia metodeja joita siihen voi käyttää. Sen lisäksi tehtävä muistutti minua siitä miten tärkeää on lukea ohjeita ja muita dokumentteja, jotka liittyvät jollain tavalla tehtävään. 
+Toteutin valinnaisista tehtävistä seuraavat:
+
+Leveyshaku: public List<Vertex<T>> breadthFirstSearch(Vertex<T> from, Vertex<T> target)
+Syvyyshaku: public List<Vertex<T>> depthFirstSearch(Vertex<T> from, Vertex<T> target)
+Tunnistus sille, onko verkossa disconnected alueita: public List<T> disconnectedVertices(Vertex<T> toStartFrom) 
+					sekä public boolean isDisconnected(Vertex<T> toStartFrom)
+
+
+Ajoin graph performance testit vasta kun olin optimoinut metodin getVertexFor metodin toimivuuden sellaiseksi, että se hakee hajautustaulusta verticies elementin hashCoden avulla ja tämän jälkeen tulokset olivat seuraavat. 
+
+![GRAPH TAULUKKO](image-32.png)
+
+Tämän taulukon pohjalta piirretyt käyrät:
+
+
+![HashMapGraph Fill](image-33.png)
+![HashMapGraph BFS](image-34.png)
+![HashMapGrah DFS](image-35.png)
+
+Seuraavaksi vaihdoin Graph luokan Map-rajapinnan toteuttavat tietorakenteet HashMap:in sijaan HashTable:ksi ja tulokset olivat seuraavat:
+![HASHTABLE GRAPH IMPLEMENTATION](image-36.png)
+
+Näiden tulosten pohjalta piirisin seuraavanlaiset käyrät. 
+![HashTableGraph fill](image-37.png)
+![HashTableGraph BFS](image-38.png)
+![HashTableGraph DFS](image-39.png)
+
+Tulokset erosivat toisistaan hieman. Hashtablea käyttäessä kaikki ajat ovat hieman korkealla kaikissa testitapauksissa. Esimerkiksi tarkemman tarkastelun perusteella huomataan, että Hashtablella on huomattavasti suurempi suoritusaika BFS:ssä suurimmalla aineistolla. Ero ei välttämättä ole huomattavaa pienten tietorakenteiden kanssa, mutta suuremmilla verkkojen koilla sillä voi olla merkitystä. 
+
+Tarkastellen sitä onko verkko tiheä ja harva voimme ottaa tarkasteluun taulukoissa olevat Vertices count ja Edge Count kohdat ja laskea tästä miten moneen solmuun jokainen solmu on yhteydessä keskimäärin. 
+
+10 solmua 40 reunaa = jokainen solmu on yhteydessä neljään muuhun solmuun
+100 solmua 532 reunaa = jokainen solmu on yhteydessä noin viiteen solmuun
+1000 solmua 5613 reunaa = jokainen solmu on yhteydessä noin 5.6 solmuun
+5000 solmua 27602 reunaa = jokainen solmu on yhteydessä noin 5.5 solmuun 
+10000 solmua 56551 reunaa = jokainen solmu on yhteydessä noin 5.7 solmuun
+50000 solmua 280174 reunaa = jokainen solmu on yhteydessä noin 5.6 solmuun keskimäärin
+1000000 solmua 557681 reunaa = jokainen solmu on yhteydessä noin 5.6 solmuun keskimäärin
+Tiheyttä voidaan laskea kaavalla:
+ ![LaskuKaava](image-40.png)
+Tämän kaavan perusteella käyttäen sitä Excelissä sain seuraavanlaiset tulokset koskien verkon tiheyttä kaavalla = 2*Solmut/(Reunat*(Reunat-1))*100
+
+![Verkon Tiheys](image-41.png)
+
+Tulosten perusteella voidaan todeta, että alussa verkko oli melko tiheä, mutta loppua kohden verkosta tuli todella harva. Esimerkiksi viimeisen arvon eli 100 000 solmun kohdalla verkossa tulisi olla yhteensä 4,999,950,000 kaarta, koska maksimireunojen määrä saadaan kaavalla ![ReunaLasku](image-42.png) jolloin laskulla ![Reunat sadallatuhannella](image-43.png). 
+
+Aikakompleksisuusanalyysit toteuttamistani metodeista tässä tehtävässä:
+
+Verkon perusmetodit eli createVertexFor, getVertices, addEdge, addDirectedEdge, getEdges, getVertexFor toteutuksen jälkeen ovat kaikki vakioaikaisia operaatiota ja niiden aikakompleksisuus on tällöin O(1), missään näissä operaatioissa ei ole tarpeellista käydä läpi kokonaan esimerkiksi reunuslistaa vaan sen sisällön perusteella käyttämällä esimerkiksi containsKey() operaatioita voidaan suoraan katsoa vaikka ennen lisäämistä jos tietyllä avaimella oleva solmu esiintyy listassa. Get-tyyppiset metodit palauttavat kutsujalleen vain listat asioista eivätkä vaadi minkäänlaisia muita operaatioita. Myös paranneltu versio getVertexFor()-metodille toimii O(1) aikakompleksisuudella. Käyttämällä toista hajautustaulua voidaan helposti hakea parametrinä tulevan elementin avain ja palauttaa tarvittava data riippumatta aineiston koosta. 
+
+Valinnaisista toteutettujen BFS ja DFS metodien aikakompleksisuudet ovat O(V+E), missä V on vertexien määrä verkossa ja E on reunojen määrä. Tämä johtuu siitä, että näissä metodeissa käydään jokainen solmu läpi ja jokaisen solmun kaaret käydään myös läpi, täten V+E eikä esimerkiksi N^2. Verkkotietorakenteessa on kaksi muuttujaa, jotka määräävät aikakompleksisuuksia. 
+
+Tämä oli kurssin osalta pahiten pelätyin harjoitus omalla kohdallani, sillä verkot vaikuttivat todella monimutkaisilta ja vaikeilta tietorakenteilta. Kuitenkin tehtävää tehdessäni huomasin niiden lopulta olevan melko yksinkertaisia ja loogisia rakenteita, joita voi soveltaa moneen eri käyttötarkoitukseen esimerkiksi sovellus- ja pelikehityksessä.
+​
