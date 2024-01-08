@@ -348,6 +348,7 @@ Seuraavaksi vaihdoin Graph luokan Map-rajapinnan toteuttavat tietorakenteet Hash
 ![HASHTABLE GRAPH IMPLEMENTATION](image-36.png)
 
 Näiden tulosten pohjalta piirisin seuraavanlaiset käyrät. 
+
 ![HashTableGraph fill](image-37.png)
 ![HashTableGraph BFS](image-38.png)
 ![HashTableGraph DFS](image-39.png)
@@ -375,7 +376,9 @@ Aikakompleksisuusanalyysit toteuttamistani metodeista tässä tehtävässä:
 
 Verkon perusmetodit eli createVertexFor, getVertices, addEdge, addDirectedEdge, getEdges, getVertexFor toteutuksen jälkeen ovat kaikki vakioaikaisia operaatiota ja niiden aikakompleksisuus on tällöin O(1), missään näissä operaatioissa ei ole tarpeellista käydä läpi kokonaan esimerkiksi reunuslistaa vaan sen sisällön perusteella käyttämällä esimerkiksi containsKey() operaatioita voidaan suoraan katsoa vaikka ennen lisäämistä jos tietyllä avaimella oleva solmu esiintyy listassa. Get-tyyppiset metodit palauttavat kutsujalleen vain listat asioista eivätkä vaadi minkäänlaisia muita operaatioita. Myös paranneltu versio getVertexFor()-metodille toimii O(1) aikakompleksisuudella. Käyttämällä toista hajautustaulua voidaan helposti hakea parametrinä tulevan elementin avain ja palauttaa tarvittava data riippumatta aineiston koosta. 
 
-Valinnaisista toteutettujen BFS ja DFS metodien aikakompleksisuudet ovat O(V+E), missä V on vertexien määrä verkossa ja E on reunojen määrä. Tämä johtuu siitä, että näissä metodeissa käydään jokainen solmu läpi ja jokaisen solmun kaaret käydään myös läpi, täten V+E eikä esimerkiksi N^2. Verkkotietorakenteessa on kaksi muuttujaa, jotka määräävät aikakompleksisuuksia. 
+Valinnaisista toteutettujen BFS ja DFS metodien aikakompleksisuudet ovat O(V+E), missä V on vertexien määrä verkossa ja E on reunojen määrä. Tämä johtuu siitä, että näissä metodeissa käydään jokainen solmu (V) läpi ja jokaisen solmun kaaret (E) käydään myös läpi, täten V+E eikä esimerkiksi N^2. Verkkotietorakenteessa on kaksi muuttujaa, jotka määräävät aikakompleksisuuksia. 
+
+DisconnectedVertices- metodin aikakompleksisuus on myös O(V+E), sillä sen suoritusaika riippuu jälleen solmujen ja reunojen lukumäärästä. Käyttämättömien solmujen läpikäynti lisää tähän metodiin myös lineaarisen läpikäynnin. 
 
 Tämä oli kurssin osalta pahiten pelätyin harjoitus omalla kohdallani, sillä verkot vaikuttivat todella monimutkaisilta ja vaikeilta tietorakenteilta. Kuitenkin tehtävää tehdessäni huomasin niiden lopulta olevan melko yksinkertaisia ja loogisia rakenteita, joita voi soveltaa moneen eri käyttötarkoitukseen esimerkiksi sovellus- ja pelikehityksessä.
 ​

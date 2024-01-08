@@ -184,7 +184,7 @@ public class Graph<T> {
          Vertex<T> current = vertexQueue.poll();
          visited.add(current);
 
-         if (target != null && current.equals(target)) {
+         if (current.equals(target)) {
             break;
          }
 
@@ -227,7 +227,7 @@ public class Graph<T> {
          Vertex<T> current = stack.pop();
          visited.add(current);
 
-         if (target != null && current.equals(target)) {
+         if (current.equals(target)) {
             return visited;
          }
 
